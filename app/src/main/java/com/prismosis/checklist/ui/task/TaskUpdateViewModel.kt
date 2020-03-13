@@ -18,7 +18,7 @@ class TaskUpdateViewModel(private val taskRepository: TaskRepository) : ViewMode
     private val _addEditResult = MutableLiveData<TaskResult>()
     val taskUpdateResult: LiveData<TaskResult> = _addEditResult
 
-    fun addNote(parentId: String?, name: String, description: String, startDate: String, endDate: String) {
+    fun addTask(parentId: String?, name: String, description: String, startDate: String, endDate: String) {
         val task = Task(UUID.randomUUID().toString(),
             parentId ?: "",
             name,

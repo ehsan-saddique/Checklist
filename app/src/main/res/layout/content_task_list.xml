@@ -9,10 +9,13 @@
         tools:showIn="@layout/activity_task_list"
         tools:context=".ui.task.TaskListActivity">
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_centerInParent="true"
-              android:textSize="16dp"
-    android:text="Hello loggedin boi"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:paddingBottom="50dp"
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>

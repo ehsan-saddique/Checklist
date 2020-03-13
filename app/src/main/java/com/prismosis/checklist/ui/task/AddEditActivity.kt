@@ -69,7 +69,7 @@ class AddEditActivity : AppCompatActivity() {
             val endDateStr = endDate.text.toString()
 
             if (taskUpdateViewModel.isFormValid(nameStr, startDateStr, endDateStr)) {
-                taskUpdateViewModel.addNote(null, nameStr, descriptionStr, startDateStr, endDateStr)
+                taskUpdateViewModel.addTask(null, nameStr, descriptionStr, startDateStr, endDateStr)
             }
         })
     }
