@@ -1,10 +1,10 @@
-package com.prismosis.checklist.data
+package com.prismosis.checklist.data.repositories
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import java.io.IOException
+import com.prismosis.checklist.data.Result
 
 class UserRepository {
 

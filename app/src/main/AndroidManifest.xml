@@ -3,13 +3,15 @@
           package="com.prismosis.checklist">
 
     <application
+            android:name=".utils.ChecklistApplication"
             android:allowBackup="false"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme"
-            android:name=".utils.ChecklistApplication">
+            android:theme="@style/AppTheme">
+        <activity android:name=".ui.task.AddEditActivity">
+        </activity>
         <activity android:name=".ui.launcher.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -17,7 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
                 android:name=".ui.task.TaskListActivity"
                 android:label="@string/title_activity_task_list"

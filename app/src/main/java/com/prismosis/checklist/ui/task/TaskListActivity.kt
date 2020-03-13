@@ -3,8 +3,8 @@ package com.prismosis.checklist.ui.task
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
@@ -23,8 +23,8 @@ class TaskListActivity : AppCompatActivity() {
         supportActionBar?.title = "Checklist"
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            val intent = Intent(this, AddEditActivity::class.java)
+            startActivity(intent)
         }
     }
 

@@ -1,8 +1,8 @@
 package com.prismosis.checklist.ui.signup
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import com.prismosis.checklist.data.UserRepository
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.prismosis.checklist.data.repositories.UserRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

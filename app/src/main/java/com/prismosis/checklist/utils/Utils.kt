@@ -7,13 +7,17 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Handler
 import android.os.Looper
-import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AlertDialog
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AlertDialog
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.prismosis.checklist.R
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -39,12 +43,12 @@ object Utils {
         var textWithBottomMargin = text + "\n"
         val snack = Snackbar.make(rootView, textWithBottomMargin, Snackbar.LENGTH_LONG)
         val view = snack.getView()
-        val tv = view.findViewById(android.support.design.R.id.snackbar_text) as? TextView
+        val tv = view.findViewById(com.google.android.material.R.id.snackbar_text) as? TextView
         tv?.setTextColor(Color.WHITE)
         tv?.maxLines = 10
 
         if (isSticky) {
-            snack.setDuration(Snackbar.LENGTH_INDEFINITE)
+            snack.setDuration(BaseTransientBottomBar.LENGTH_INDEFINITE)
             snack.setAction("Dismiss", View.OnClickListener {
                 //--
             })
@@ -81,5 +85,23 @@ object Utils {
 
         val handler = Handler(Looper.getMainLooper())
         handler.post { dialogBuilder.create().show() }
+    }
+
+    fun stringFromDate(date: Date) : String {
+        val format = SimpleDateFormat("dd/MM/yyyy hh:mm a")
+        return format.format(date)
+    }
+
+    fun dateFromString(dateString: String) : Date {
+        val format = SimpleDateFormat("dd/MM/yyyy hh:mm a")
+        var date: Date
+        try {
+            date = format.parse(dateString)
+        }
+        catch (ex: Exception) {
+            date = Date()
+        }
+
+        return date
     }
 }

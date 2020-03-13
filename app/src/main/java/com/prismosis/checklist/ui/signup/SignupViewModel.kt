@@ -1,13 +1,13 @@
 package com.prismosis.checklist.ui.signup
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import android.util.Patterns
 import com.prismosis.checklist.data.Result
 
 import com.prismosis.checklist.R
-import com.prismosis.checklist.data.UserRepository
+import com.prismosis.checklist.data.repositories.UserRepository
 
 class SignupViewModel(private val userRepository: UserRepository) : ViewModel() {
 
