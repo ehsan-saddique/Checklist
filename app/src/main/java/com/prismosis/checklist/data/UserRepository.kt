@@ -12,13 +12,13 @@ class UserRepository {
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(username, password).addOnCompleteListener{ task ->
             if(task.isSuccessful){
-                callback.invoke(Result.Success("Signed up successfully"))
+                callback.invoke(Result.Success("You have signed up successfully."))
             } else {
                 try {
                     throw task.exception ?: java.lang.Exception("Unknown error")
                 }
                 catch (ex: FirebaseAuthUserCollisionException) {
-                    callback.invoke(Result.Error(Exception("Email already exists. Please use a different email")))
+                    callback.invoke(Result.Error(Exception("Email already exists. Please use a different email.")))
                 }
                 catch (ex: java.lang.Exception) {
                     callback.invoke(Result.Error(Exception("Error signing up: ${task.exception.toString()}")))

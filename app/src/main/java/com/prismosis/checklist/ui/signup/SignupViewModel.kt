@@ -20,9 +20,9 @@ class SignupViewModel(private val userRepository: UserRepository) : ViewModel() 
     fun signup(username: String, password: String) {
         userRepository.signup(username, password, callback = { result ->
             if (result is Result.Success) {
-                _signupResult.value = SignupResult(success = R.string.signup_success)
+                _signupResult.value = SignupResult(success = result.data)
             } else {
-                _signupResult.value = SignupResult(error = R.string.login_failed)
+                _signupResult.value = SignupResult(error = result.toString())
             }
         })
     }

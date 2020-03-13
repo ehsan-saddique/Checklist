@@ -15,6 +15,8 @@ import android.widget.*
 
 import com.prismosis.checklist.R
 import com.prismosis.checklist.ui.signup.SignupActivity
+import com.prismosis.checklist.ui.task.TaskListActivity
+import com.prismosis.checklist.utils.Utils
 
 class LoginActivity : AppCompatActivity() {
 
@@ -24,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_login)
+        supportActionBar?.title = "Login"
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
@@ -53,10 +56,10 @@ class LoginActivity : AppCompatActivity() {
 
             loadingView.visibility = View.GONE
             if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
+                onLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
-                showLoginSuccess(loginResult.success)
+                onLoginSuccess(loginResult.success)
             }
         })
 
@@ -75,18 +78,8 @@ class LoginActivity : AppCompatActivity() {
                 )
             }
 
-            setOnEditorActionListener { _, actionId, _ ->
-                when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString()
-                        )
-                }
-                false
-            }
-
             login.setOnClickListener {
+                Utils.hideSoftKeyboard(this@LoginActivity)
                 loadingView.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
@@ -98,12 +91,15 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun showLoginSuccess(msg: String) {
-        Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
+    private fun onLoginSuccess(msg: String) {
+        val intent = Intent(this@LoginActivity, TaskListActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+        finish()
     }
 
-    private fun showLoginFailed(errorString: String) {
-        Toast.makeText(applicationContext, errorString, Toast.LENGTH_LONG).show()
+    private fun onLoginFailed(errorString: String) {
+        Utils.showSnackBar(window.decorView.rootView, errorString)
     }
 }
 

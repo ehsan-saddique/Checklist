@@ -13,6 +13,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 
 import com.prismosis.checklist.R
+import com.prismosis.checklist.utils.Utils
 
 class SignupActivity : AppCompatActivity() {
 
@@ -22,6 +23,7 @@ class SignupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_signup)
+        supportActionBar?.title = "Login"
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
@@ -88,17 +90,19 @@ class SignupActivity : AppCompatActivity() {
         }
 
         signup.setOnClickListener {
+            Utils.hideSoftKeyboard(this)
             loading.visibility = View.VISIBLE
             signupViewModel.signup(username.text.toString(), password.text.toString())
         }
     }
 
-    private fun showSignupSuccess(@StringRes successString: Int) {
-        Toast.makeText(applicationContext, successString, Toast.LENGTH_SHORT).show()
+    private fun showSignupSuccess(successString: String) {
+        Toast.makeText(this, successString, Toast.LENGTH_LONG).show()
+        finish()
     }
 
-    private fun showSignupFailed(@StringRes errorString: Int) {
-        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    private fun showSignupFailed(errorString: String) {
+        Utils.showSnackBar(window.decorView.rootView, errorString)
     }
 }
 
