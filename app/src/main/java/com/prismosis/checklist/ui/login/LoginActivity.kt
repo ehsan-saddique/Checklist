@@ -1,6 +1,7 @@
 package com.prismosis.checklist.ui.login
 
 import android.app.Activity
+import android.app.ProgressDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -26,13 +27,20 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_login)
+        setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.title = "Login"
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
         val signup = findViewById<Button>(R.id.signup)
-        val loadingView = findViewById<RelativeLayout>(R.id.loadingView)
+
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setTitle("Logging In")
+        progressDialog.setMessage("Please wait..")
+        progressDialog.setCancelable(false)
+        progressDialog.isIndeterminate = true
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
 
         loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -54,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
-            loadingView.visibility = View.GONE
+            progressDialog.hide()
             if (loginResult.error != null) {
                 onLoginFailed(loginResult.error)
             }
@@ -80,7 +88,7 @@ class LoginActivity : AppCompatActivity() {
 
             login.setOnClickListener {
                 Utils.hideSoftKeyboard(this@LoginActivity)
-                loadingView.visibility = View.VISIBLE
+                progressDialog.show()
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
 

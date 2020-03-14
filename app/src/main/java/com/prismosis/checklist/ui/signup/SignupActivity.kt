@@ -1,6 +1,7 @@
 package com.prismosis.checklist.ui.signup
 
 import android.app.Activity
+import android.app.ProgressDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -23,13 +24,20 @@ class SignupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_signup)
-        supportActionBar?.title = "Login"
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar?.title = "Sign Up"
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
         val confirmPassword = findViewById<EditText>(R.id.confirm_password)
         val signup = findViewById<Button>(R.id.signup)
-        val loading = findViewById<ProgressBar>(R.id.loading)
+
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setTitle("Signing Up")
+        progressDialog.setMessage("Please wait..")
+        progressDialog.setCancelable(false)
+        progressDialog.isIndeterminate = true
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
 
         signupViewModel = ViewModelProviders.of(this, SignupViewModelFactory())
             .get(SignupViewModel::class.java)
@@ -54,7 +62,7 @@ class SignupActivity : AppCompatActivity() {
         signupViewModel.signupResult.observe(this@SignupActivity, Observer {
             val signupResult = it ?: return@Observer
 
-            loading.visibility = View.GONE
+            progressDialog.hide()
             if (signupResult.error != null) {
                 showSignupFailed(signupResult.error)
             }
@@ -91,7 +99,7 @@ class SignupActivity : AppCompatActivity() {
 
         signup.setOnClickListener {
             Utils.hideSoftKeyboard(this)
-            loading.visibility = View.VISIBLE
+            progressDialog.show()
             signupViewModel.signup(username.text.toString(), password.text.toString())
         }
     }

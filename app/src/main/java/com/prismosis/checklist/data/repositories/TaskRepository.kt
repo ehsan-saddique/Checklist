@@ -42,6 +42,12 @@ class TaskRepository(database: AppDatabase) {
         }
     }
 
+    fun deleteAllTasks() {
+        GlobalScope.launch {
+            taskDao.deleteAllTasks()
+        }
+    }
+
     fun updateTaskStatus(task: DTOTask, taskStatus: Enum.TaskStatus, callback: (Result<String>)->Unit) {
         GlobalScope.launch {
             updateTaskStatusDownstream(task, taskStatus)

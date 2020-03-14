@@ -36,5 +36,9 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
         })
     }
 
+    fun deleteAllTasks() {
+        taskRepository.deleteAllTasks()
+    }
+
 
 }

@@ -99,8 +99,9 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_logout -> {
 
-            Utils.showDialog(this,null, "Are you sure you want to logout?", "Logout", true, DialogInterface.OnClickListener { _, _ ->
+            Utils.showDialog(this,null, "Are you sure you want to logout? Tasks which have not been synced with server will be deleted.", "Logout", true, DialogInterface.OnClickListener { _, _ ->
                 FirebaseAuth.getInstance().signOut()
+                taskViewModel.deleteAllTasks()
                 finish()
                 val intent = Intent(this@TaskListActivity, LauncherActivity::class.java)
                 startActivity(intent)

@@ -33,4 +33,7 @@ interface TaskDao {
 
     @Query("SELECT * FROM tasks WHERE parentId = :parentId")
     fun getSiblings(parentId: String): List<DTOTask>
+
+    @Query("DELETE FROM tasks")
+    fun deleteAllTasks()
 }

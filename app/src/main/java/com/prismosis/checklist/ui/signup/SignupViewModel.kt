@@ -40,11 +40,7 @@ class SignupViewModel(private val userRepository: UserRepository) : ViewModel() 
     }
 
     private fun isUserNameValid(username: String): Boolean {
-        return if (username.contains('@')) {
-            Patterns.EMAIL_ADDRESS.matcher(username).matches()
-        } else {
-            username.isNotBlank()
-        }
+        return username.isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(username).matches()
     }
 
     private fun isPasswordValid(password: String): Boolean {
