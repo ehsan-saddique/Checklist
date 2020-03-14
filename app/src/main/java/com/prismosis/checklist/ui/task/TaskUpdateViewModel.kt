@@ -21,7 +21,7 @@ class TaskUpdateViewModel(private val taskRepository: TaskRepository) : ViewMode
     val taskUpdateResult: LiveData<TaskResult> = _addEditResult
 
     fun addTask(parentId: String?, name: String, description: String, startDate: String, endDate: String) {
-        val task = DTOTask(0, UUID.randomUUID().toString(),
+        val task = DTOTask(0, null, UUID.randomUUID().toString(),
             parentId ?: "",
             name,
             description,
@@ -35,7 +35,7 @@ class TaskUpdateViewModel(private val taskRepository: TaskRepository) : ViewMode
     }
 
     fun updateTask(task: DTOTask, name: String, description: String, startDate: String, endDate: String, status: Enum.TaskStatus) {
-        val taskToUpdate = DTOTask(0, task.id,
+        val taskToUpdate = DTOTask(0, task._id, task.id,
             task.parentId,
             name,
             description,

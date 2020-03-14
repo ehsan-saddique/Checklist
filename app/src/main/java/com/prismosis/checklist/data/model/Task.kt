@@ -34,7 +34,8 @@ data class Task(
 //
 //}
 
-data class DTOTask(var subTasksCount: Int,
+data class DTOTask(var subTasksCount: Int?,
+                         val _id: Int?,
                          val id: String,
                          val parentId: String,
                          val name: String,
@@ -45,6 +46,7 @@ data class DTOTask(var subTasksCount: Int,
                          var isDirty: Boolean = true,
                          var isDeleted: Boolean = false) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readInt(),
         parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
@@ -59,11 +61,12 @@ data class DTOTask(var subTasksCount: Int,
     }
 
     fun getTaskEntity(): Task {
-        return Task(0, id, parentId, name, description, startDate, endDate, status, isDirty, isDeleted)
+        return Task(_id ?: 0, id, parentId, name, description, startDate, endDate, status, isDirty, isDeleted)
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(subTasksCount)
+        parcel.writeInt(subTasksCount ?: 0)
+        parcel.writeInt(_id ?: 0)
         parcel.writeString(id)
         parcel.writeString(parentId)
         parcel.writeString(name)

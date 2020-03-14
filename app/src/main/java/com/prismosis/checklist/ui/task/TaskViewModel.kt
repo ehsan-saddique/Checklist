@@ -30,8 +30,8 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
 
     fun changeTaskStatus(task: DTOTask, changeToStatus: Enum.TaskStatus) {
         task.isDirty = true
-        task.status = changeToStatus
-        taskRepository.updateTask(task, callback = { result ->
+
+        taskRepository.updateTaskStatus(task, changeToStatus, callback = {
             _taskResult.value = TaskResult(success = "Task status has been changed to ${changeToStatus.string}")
         })
     }

@@ -21,4 +21,16 @@ interface TaskDao {
 
     @Query("SELECT COUNT(subtask.id) AS subTasksCount, task._id, task.id, task.parentId, task.name, task.description, task.startDate, task.endDate, task.status, task.isDirty, task.isDeleted FROM tasks as task LEFT JOIN tasks subtask ON task.id = subtask.parentid AND subtask.isDeleted = 0 WHERE (task.id = :taskId OR task.parentId = :taskId) AND task.isDeleted = 0 GROUP BY task.id ORDER BY task._id")
     fun getAllSubTasks(taskId: String): LiveData<List<DTOTask>>
+
+    @Query("SELECT * FROM tasks WHERE id = :taskId")
+    fun getTask(taskId: String): DTOTask
+
+    @Query("SELECT * FROM tasks WHERE id = (SELECT parentId FROM tasks WHERE id = :taskId)")
+    fun getParentTask(taskId: String): DTOTask?
+
+    @Query("SELECT * FROM tasks WHERE parentId = :taskId")
+    fun getSubTasks(taskId: String): List<DTOTask>
+
+    @Query("SELECT * FROM tasks WHERE parentId = :parentId")
+    fun getSiblings(parentId: String): List<DTOTask>
 }
