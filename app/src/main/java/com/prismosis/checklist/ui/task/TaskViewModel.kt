@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 
 import com.prismosis.checklist.data.model.Task
 import com.prismosis.checklist.data.repositories.TaskRepository
+import com.prismosis.checklist.utils.Enum
 import com.prismosis.checklist.utils.Utils
 import java.util.*
 
@@ -20,8 +21,17 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
 
     fun deleteTask(task: Task) {
         task.isDelete = true
+        task.isDirty = true
         taskRepository.updateTask(task, callback = { result ->
             _taskResult.value = TaskResult(success = "Task has been deleted")
+        })
+    }
+
+    fun changeTaskStatus(task: Task, changeToStatus: Enum.TaskStatus) {
+        task.isDirty = true
+        task.status = changeToStatus
+        taskRepository.updateTask(task, callback = { result ->
+            _taskResult.value = TaskResult(success = "Task status has been changed to ${changeToStatus.string}")
         })
     }
 

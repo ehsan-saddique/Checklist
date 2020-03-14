@@ -4,8 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
-import com.prismosis.checklist.utils.DateTimeConverter
+import com.prismosis.checklist.utils.Enum
 import java.util.*
 
 /**
@@ -21,6 +20,8 @@ data class Task(
     var description: String?,
     var startDate: Date,
     var endDate: Date,
+    var status: Enum.TaskStatus,
+    var isDirty: Boolean = true,
     var isDelete: Boolean = false
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -30,6 +31,8 @@ data class Task(
         parcel.readString(),
         startDate = Date(parcel.readLong()),
         endDate = Date(parcel.readLong()),
+        status = Enum.TaskStatus.getValueFromInt(parcel.readInt()),
+        isDirty = parcel.readInt() == 1,
         isDelete = parcel.readInt() == 1
     ) {
     }
@@ -41,6 +44,8 @@ data class Task(
         parcel.writeString(description)
         parcel.writeLong(startDate.time)
         parcel.writeLong(endDate.time)
+        parcel.writeInt(status.value)
+        parcel.writeInt(if (isDirty) 1 else 0)
         parcel.writeInt(if (isDelete) 1 else 0)
     }
 

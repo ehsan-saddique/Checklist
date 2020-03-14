@@ -3,13 +3,11 @@ package com.prismosis.checklist.ui.task
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.RelativeLayout
-import android.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +19,10 @@ import com.prismosis.checklist.ui.launcher.LauncherActivity
 import com.prismosis.checklist.utils.Utils
 
 import kotlinx.android.synthetic.main.activity_task_list.*
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import com.prismosis.checklist.utils.Enum
+
 
 class TaskListActivity : AppCompatActivity(), TaskListAdapter.ClickListener {
 
@@ -130,6 +132,33 @@ class TaskListActivity : AppCompatActivity(), TaskListAdapter.ClickListener {
     }
 
     override fun onChangeStatusClick(task: Task) {
+        showChangeStatusDialog(task)
+    }
+
+    private fun showChangeStatusDialog(task: Task) {
+
+        val dialogBuilder = AlertDialog.Builder(this)
+        dialogBuilder.setTitle("Change Status to")
+        val dataSource = listOf<String>(Enum.TaskStatus.PENDING.string,
+            Enum.TaskStatus.INPROGRESS.string,
+            Enum.TaskStatus.COMPLETED.string,
+            Enum.TaskStatus.EXPIRED.string)
+
+        val currentStatus = task.status
+        val checkedItem = dataSource.indexOf(currentStatus.string)
+
+        dialogBuilder.setSingleChoiceItems(dataSource.toTypedArray(), checkedItem, DialogInterface.OnClickListener { dialog, item ->
+
+            val selectedItemStr = dataSource[item]
+            val selectedStatus = Enum.TaskStatus.getValueFromString(selectedItemStr)
+
+            taskViewModel.changeTaskStatus(task, selectedStatus)
+
+            dialog.dismiss()
+        })
+
+        val alertDialog = dialogBuilder.create()
+        alertDialog.show()
 
     }
 

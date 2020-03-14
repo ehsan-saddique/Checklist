@@ -40,7 +40,7 @@ object Utils {
     }
 
     fun showSnackBar(rootView: View, text: String, isSticky: Boolean = true) {
-        var textWithBottomMargin = text + "\n"
+        var textWithBottomMargin = text + "\n\n"
         val snack = Snackbar.make(rootView, textWithBottomMargin, Snackbar.LENGTH_LONG)
         val view = snack.getView()
         val tv = view.findViewById(com.google.android.material.R.id.snackbar_text) as? TextView
@@ -49,7 +49,7 @@ object Utils {
 
         if (isSticky) {
             snack.setDuration(BaseTransientBottomBar.LENGTH_INDEFINITE)
-            snack.setAction("Dismiss", View.OnClickListener {
+            snack.setAction("Dismiss\n\n", View.OnClickListener {
                 //--
             })
         }

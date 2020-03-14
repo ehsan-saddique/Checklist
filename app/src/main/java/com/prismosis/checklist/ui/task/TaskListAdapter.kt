@@ -44,6 +44,7 @@ class TaskListAdapter(private var tasks: List<Task>, private var listener: Click
         private var startDate: TextView
         private var endDate: TextView
         private var subTasks: TextView
+        private var taskStatus: TextView
         private var toolbar: Toolbar
 
         init {
@@ -52,6 +53,7 @@ class TaskListAdapter(private var tasks: List<Task>, private var listener: Click
             startDate = itemView.findViewById(R.id.task_start_date)
             endDate = itemView.findViewById(R.id.task_end_date)
             subTasks = itemView.findViewById(R.id.sub_tasks)
+            taskStatus = itemView.findViewById(R.id.task_status)
             toolbar = itemView.findViewById(R.id.toolbar_task_item)
             toolbar.inflateMenu(R.menu.menu_task_item)
         }
@@ -62,6 +64,8 @@ class TaskListAdapter(private var tasks: List<Task>, private var listener: Click
             startDate.setText("Starts: " + Utils.stringFromDate(task.startDate))
             endDate.setText("Ends: " + Utils.stringFromDate(task.endDate))
             subTasks.setText("Sub Tasks: 0")
+            taskStatus.setText(task.status.string)
+            taskStatus.setBackgroundResource(task.status.drawableId)
 
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {

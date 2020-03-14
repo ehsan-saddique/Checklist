@@ -10,6 +10,7 @@ import com.prismosis.checklist.R
 import com.prismosis.checklist.data.model.Task
 import com.prismosis.checklist.data.repositories.TaskRepository
 import com.prismosis.checklist.data.repositories.UserRepository
+import com.prismosis.checklist.utils.Enum
 import com.prismosis.checklist.utils.Utils
 import java.util.*
 
@@ -24,20 +25,22 @@ class TaskUpdateViewModel(private val taskRepository: TaskRepository) : ViewMode
             name,
             description,
             Utils.dateFromString(startDate),
-            Utils.dateFromString(endDate))
+            Utils.dateFromString(endDate),
+            Enum.TaskStatus.PENDING)
 
         taskRepository.insertTask(task, callback = { result ->
             _addEditResult.value = TaskResult(success = "Task has been added")
         })
     }
 
-    fun updateTask(id: String, name: String, description: String, startDate: String, endDate: String) {
+    fun updateTask(id: String, name: String, description: String, startDate: String, endDate: String, status: Enum.TaskStatus) {
         val task = Task(id,
             "",
             name,
             description,
             Utils.dateFromString(startDate),
-            Utils.dateFromString(endDate))
+            Utils.dateFromString(endDate),
+            status)
 
         taskRepository.updateTask(task, callback = { result ->
             _addEditResult.value = TaskResult(success = "Task has been updated")

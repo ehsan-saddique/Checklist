@@ -1,6 +1,5 @@
 package com.prismosis.checklist.data.database
 
-import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -8,14 +7,14 @@ import androidx.room.TypeConverters
 import com.prismosis.checklist.data.model.Task
 import com.prismosis.checklist.data.model.TaskDao
 import com.prismosis.checklist.utils.ChecklistApplication
-import com.prismosis.checklist.utils.DateTimeConverter
+import com.prismosis.checklist.utils.TypeConverter
 
 /**
  * Created by Ehsan Saddique on 2020-03-13
  */
 
 @Database(entities = [Task::class], version = 1, exportSchema = false)
-@TypeConverters(DateTimeConverter::class)
+@TypeConverters(TypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun taskDao(): TaskDao

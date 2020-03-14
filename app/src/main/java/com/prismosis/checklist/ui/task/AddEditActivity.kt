@@ -14,6 +14,7 @@ import android.widget.TimePicker
 import android.widget.DatePicker
 import androidx.appcompat.app.AlertDialog
 import com.prismosis.checklist.data.model.Task
+import com.prismosis.checklist.utils.Enum
 import java.util.*
 
 
@@ -87,7 +88,7 @@ class AddEditActivity : AppCompatActivity() {
 
             if (taskUpdateViewModel.isFormValid(nameStr, startDateStr, endDateStr)) {
                 if (isEditScreen) {
-                    taskUpdateViewModel.updateTask(task?.id ?: "", nameStr, descriptionStr, startDateStr, endDateStr)
+                    taskUpdateViewModel.updateTask(task?.id ?: "", nameStr, descriptionStr, startDateStr, endDateStr, task?.status ?: Enum.TaskStatus.PENDING)
                 }
                 else {
                     taskUpdateViewModel.addTask(null, nameStr, descriptionStr, startDateStr, endDateStr)
