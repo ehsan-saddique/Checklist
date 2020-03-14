@@ -18,5 +18,12 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
         return taskRepository.allTasks
     }
 
+    fun deleteTask(task: Task) {
+        task.isDelete = true
+        taskRepository.updateTask(task, callback = { result ->
+            _taskResult.value = TaskResult(success = "Task has been deleted")
+        })
+    }
+
 
 }

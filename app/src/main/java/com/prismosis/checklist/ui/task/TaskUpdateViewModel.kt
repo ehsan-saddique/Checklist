@@ -31,6 +31,19 @@ class TaskUpdateViewModel(private val taskRepository: TaskRepository) : ViewMode
         })
     }
 
+    fun updateTask(id: String, name: String, description: String, startDate: String, endDate: String) {
+        val task = Task(id,
+            "",
+            name,
+            description,
+            Utils.dateFromString(startDate),
+            Utils.dateFromString(endDate))
+
+        taskRepository.updateTask(task, callback = { result ->
+            _addEditResult.value = TaskResult(success = "Task has been updated")
+        })
+    }
+
     fun isFormValid(name: String, startDate: String, endDate: String): Boolean {
         var isValid = true
         if (name.isEmpty()) {

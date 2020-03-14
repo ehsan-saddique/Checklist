@@ -16,9 +16,6 @@ interface TaskDao {
     @Update
     fun update(task: Task)
 
-    @Delete
-    fun delete(task: Task)
-
-    @Query("SELECT * FROM tasks")
+    @Query("SELECT * FROM tasks WHERE isDelete = 0")
     fun getAllTasks(): LiveData<List<Task>>
 }

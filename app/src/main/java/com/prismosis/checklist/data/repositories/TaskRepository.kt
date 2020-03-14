@@ -36,4 +36,14 @@ class TaskRepository(database: AppDatabase) {
         }
     }
 
+    fun updateTask(task: Task, callback: (Result<String>)->Unit) {
+        GlobalScope.launch {
+            taskDao.update(task)
+
+            GlobalScope.launch(Dispatchers.Main) {
+                callback.invoke(Result.Success("Task has been updated"))
+            }
+        }
+    }
+
 }

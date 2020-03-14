@@ -9,31 +9,48 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.prismosis.checklist.R
-import com.prismosis.checklist.ui.signup.afterTextChanged
 import com.prismosis.checklist.utils.Utils
 import android.widget.TimePicker
 import android.widget.DatePicker
 import androidx.appcompat.app.AlertDialog
+import com.prismosis.checklist.data.model.Task
 import java.util.*
 
 
 class AddEditActivity : AppCompatActivity() {
 
     private lateinit var taskUpdateViewModel: TaskUpdateViewModel
-    lateinit var startDate: EditText
+    private lateinit var startDate: EditText
     private lateinit var endDate: EditText
+    private var isEditScreen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit)
         setSupportActionBar(findViewById(R.id.toolbar))
-        supportActionBar?.title = "Add"
+        supportActionBar?.title = "Add Task"
 
         val name = findViewById<EditText>(R.id.task_name)
         val description = findViewById<EditText>(R.id.task_description)
         startDate = findViewById<EditText>(R.id.task_start_date)
         endDate = findViewById<EditText>(R.id.task_end_date)
-        val btnAdd = findViewById<Button>(R.id.add_button)
+        val btnUpdate = findViewById<Button>(R.id.add_button)
+
+
+        var task: Task? = null
+        if (intent.hasExtra("task")) {
+            supportActionBar?.title = "Edit Task"
+            btnUpdate.setText("Update")
+            isEditScreen = true
+
+            task = intent.extras?.get("task") as? Task
+            task?.let {
+                name.setText(task.name)
+                description.setText(task.description)
+                startDate.setText(Utils.stringFromDate(task.startDate))
+                endDate.setText(Utils.stringFromDate(task.endDate))
+            }
+        }
 
 
         taskUpdateViewModel = ViewModelProviders.of(this, TaskUpdateViewModelFactory())
@@ -48,7 +65,7 @@ class AddEditActivity : AppCompatActivity() {
             }
 
             if (taskResult.success != null) {
-                onSuccess()
+                onSuccess(taskResult.success)
             }
         })
 
@@ -60,7 +77,7 @@ class AddEditActivity : AppCompatActivity() {
             showDateTimePicker(endDate)
         }
 
-        btnAdd.setOnClickListener(View.OnClickListener {
+        btnUpdate.setOnClickListener(View.OnClickListener {
             Utils.hideSoftKeyboard(this)
 
             val nameStr = name.text.toString()
@@ -69,13 +86,18 @@ class AddEditActivity : AppCompatActivity() {
             val endDateStr = endDate.text.toString()
 
             if (taskUpdateViewModel.isFormValid(nameStr, startDateStr, endDateStr)) {
-                taskUpdateViewModel.addTask(null, nameStr, descriptionStr, startDateStr, endDateStr)
+                if (isEditScreen) {
+                    taskUpdateViewModel.updateTask(task?.id ?: "", nameStr, descriptionStr, startDateStr, endDateStr)
+                }
+                else {
+                    taskUpdateViewModel.addTask(null, nameStr, descriptionStr, startDateStr, endDateStr)
+                }
             }
         })
     }
 
-    private fun onSuccess() {
-        Toast.makeText(this, "Task has been added", Toast.LENGTH_LONG).show()
+    private fun onSuccess(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         finish()
     }
 
@@ -101,7 +123,7 @@ class AddEditActivity : AppCompatActivity() {
             timePicker.minute = calendar.get(Calendar.MINUTE)
         }
 
-        if (editText.text.toString().isEmpty() && editText === endDate) {
+        if (editText === endDate) {
             if (!startDate.text.toString().isEmpty()) {
                 datePicker.minDate = Utils.dateFromString(startDate.text.toString()).time
             }
