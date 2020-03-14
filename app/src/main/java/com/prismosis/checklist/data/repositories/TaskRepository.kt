@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import android.content.Context
 import com.prismosis.checklist.data.Result
 import com.prismosis.checklist.data.database.AppDatabase
+import com.prismosis.checklist.data.model.DTOTask
 import com.prismosis.checklist.data.model.Task
 import com.prismosis.checklist.data.model.TaskDao
 import kotlinx.coroutines.CoroutineStart
@@ -19,16 +20,13 @@ class TaskRepository(database: AppDatabase) {
 
     private var taskDao: TaskDao
 
-    val allTasks: LiveData<List<Task>>
-
     init {
         taskDao = database.taskDao()
-        allTasks = taskDao.getAllTasks()
     }
 
-    fun insertTask(task: Task, callback: (Result<String>)->Unit) {
+    fun insertTask(task: DTOTask, callback: (Result<String>)->Unit) {
         GlobalScope.launch {
-            taskDao.insert(task)
+            taskDao.insert(task.getTaskEntity())
 
             GlobalScope.launch(Dispatchers.Main) {
                 callback.invoke(Result.Success("Task has been added"))
@@ -36,14 +34,22 @@ class TaskRepository(database: AppDatabase) {
         }
     }
 
-    fun updateTask(task: Task, callback: (Result<String>)->Unit) {
+    fun updateTask(task: DTOTask, callback: (Result<String>)->Unit) {
         GlobalScope.launch {
-            taskDao.update(task)
+            taskDao.update(task.getTaskEntity())
 
             GlobalScope.launch(Dispatchers.Main) {
                 callback.invoke(Result.Success("Task has been updated"))
             }
         }
+    }
+
+    fun getAllTasks(): LiveData<List<DTOTask>> {
+        return taskDao.getAllTasks()
+    }
+
+    fun getAllSubTasks(taskId: String): LiveData<List<DTOTask>> {
+        return taskDao.getAllSubTasks(taskId)
     }
 
 }

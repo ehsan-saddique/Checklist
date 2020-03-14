@@ -7,6 +7,7 @@ import android.util.Patterns
 import com.prismosis.checklist.data.Result
 
 import com.prismosis.checklist.R
+import com.prismosis.checklist.data.model.DTOTask
 import com.prismosis.checklist.data.model.Task
 import com.prismosis.checklist.data.repositories.TaskRepository
 import com.prismosis.checklist.data.repositories.UserRepository
@@ -20,7 +21,7 @@ class TaskUpdateViewModel(private val taskRepository: TaskRepository) : ViewMode
     val taskUpdateResult: LiveData<TaskResult> = _addEditResult
 
     fun addTask(parentId: String?, name: String, description: String, startDate: String, endDate: String) {
-        val task = Task(UUID.randomUUID().toString(),
+        val task = DTOTask(0, UUID.randomUUID().toString(),
             parentId ?: "",
             name,
             description,
@@ -33,16 +34,16 @@ class TaskUpdateViewModel(private val taskRepository: TaskRepository) : ViewMode
         })
     }
 
-    fun updateTask(id: String, name: String, description: String, startDate: String, endDate: String, status: Enum.TaskStatus) {
-        val task = Task(id,
-            "",
+    fun updateTask(task: DTOTask, name: String, description: String, startDate: String, endDate: String, status: Enum.TaskStatus) {
+        val taskToUpdate = DTOTask(0, task.id,
+            task.parentId,
             name,
             description,
             Utils.dateFromString(startDate),
             Utils.dateFromString(endDate),
             status)
 
-        taskRepository.updateTask(task, callback = { result ->
+        taskRepository.updateTask(taskToUpdate, callback = { result ->
             _addEditResult.value = TaskResult(success = "Task has been updated")
         })
     }

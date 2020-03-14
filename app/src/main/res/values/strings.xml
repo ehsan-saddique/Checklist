@@ -14,7 +14,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="signup_failed">"Login failed"</string>
     <string name="signup_success">"You have signed up successfully."</string>
-    <string name="title_activity_task_list">TaskListActivity</string>
+    <string name="title_activity_task_list">Checklist</string>
     <string name="sign_up">Sign Up</string>
     <string name="or">OR</string>
     <string name="logout">Logout</string>

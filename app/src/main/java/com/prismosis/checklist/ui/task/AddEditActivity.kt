@@ -13,6 +13,7 @@ import com.prismosis.checklist.utils.Utils
 import android.widget.TimePicker
 import android.widget.DatePicker
 import androidx.appcompat.app.AlertDialog
+import com.prismosis.checklist.data.model.DTOTask
 import com.prismosis.checklist.data.model.Task
 import com.prismosis.checklist.utils.Enum
 import java.util.*
@@ -24,6 +25,7 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var startDate: EditText
     private lateinit var endDate: EditText
     private var isEditScreen = false
+    private var parentId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,19 +40,23 @@ class AddEditActivity : AppCompatActivity() {
         val btnUpdate = findViewById<Button>(R.id.add_button)
 
 
-        var task: Task? = null
+        var task: DTOTask? = null
         if (intent.hasExtra("task")) {
             supportActionBar?.title = "Edit Task"
             btnUpdate.setText("Update")
             isEditScreen = true
 
-            task = intent.extras?.get("task") as? Task
+            task = intent.extras?.get("task") as? DTOTask
             task?.let {
                 name.setText(task.name)
                 description.setText(task.description)
                 startDate.setText(Utils.stringFromDate(task.startDate))
                 endDate.setText(Utils.stringFromDate(task.endDate))
             }
+        }
+
+        if (intent.hasExtra("parentId")) {
+            parentId = intent.extras.getString("parentId") ?: ""
         }
 
 
@@ -88,10 +94,10 @@ class AddEditActivity : AppCompatActivity() {
 
             if (taskUpdateViewModel.isFormValid(nameStr, startDateStr, endDateStr)) {
                 if (isEditScreen) {
-                    taskUpdateViewModel.updateTask(task?.id ?: "", nameStr, descriptionStr, startDateStr, endDateStr, task?.status ?: Enum.TaskStatus.PENDING)
+                    taskUpdateViewModel.updateTask(task!!, nameStr, descriptionStr, startDateStr, endDateStr, task.status)
                 }
                 else {
-                    taskUpdateViewModel.addTask(null, nameStr, descriptionStr, startDateStr, endDateStr)
+                    taskUpdateViewModel.addTask(parentId, nameStr, descriptionStr, startDateStr, endDateStr)
                 }
             }
         })

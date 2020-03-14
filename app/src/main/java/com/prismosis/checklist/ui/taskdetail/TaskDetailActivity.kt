@@ -1,4 +1,4 @@
-package com.prismosis.checklist.ui.task
+package com.prismosis.checklist.ui.taskdetail
 
 import android.content.DialogInterface
 import android.content.Intent
@@ -19,51 +19,44 @@ import com.prismosis.checklist.ui.launcher.LauncherActivity
 import com.prismosis.checklist.utils.Utils
 
 import kotlinx.android.synthetic.main.activity_task_list.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.prismosis.checklist.data.model.DTOTask
-import com.prismosis.checklist.ui.taskdetail.TaskDetailActivity
+import com.prismosis.checklist.ui.task.AddEditActivity
+import com.prismosis.checklist.ui.task.ClickListener
 import com.prismosis.checklist.utils.Enum
 
 
-class TaskListActivity : AppCompatActivity(), ClickListener {
+class TaskDetailActivity : AppCompatActivity(), ClickListener {
 
-    private lateinit var taskViewModel: TaskViewModel
-    private lateinit var mAdapter: TaskListAdapter
+    private lateinit var taskDetailViewModel: TaskDetailViewModel
+    private lateinit var mAdapter: TaskDetailAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_task_list)
+        setContentView(R.layout.activity_task_detail)
         setSupportActionBar(findViewById(R.id.toolbar))
-        supportActionBar?.title = "Checklist"
+        supportActionBar?.title = "Task Detail"
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         val emptyView = findViewById<RelativeLayout>(R.id.empty_view)
 
-        taskViewModel = ViewModelProviders.of(this, TaskViewModelFactory())
-            .get(TaskViewModel::class.java)
+        val taskId = intent.extras?.getString("taskId") ?: ""
 
-        mAdapter = TaskListAdapter(ArrayList<DTOTask>(), this)
+        taskDetailViewModel = ViewModelProviders.of(this, TaskDetailViewModelFactory())
+            .get(TaskDetailViewModel::class.java)
+
+        mAdapter = TaskDetailAdapter(ArrayList<DTOTask>(), this)
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@TaskListActivity)
+            layoutManager = LinearLayoutManager(this@TaskDetailActivity)
             adapter = mAdapter
         }
 
 
-        taskViewModel.getAllTasks().observe(this, Observer { tasks ->
+        taskDetailViewModel.getAllSubTasks(taskId).observe(this, Observer { tasks ->
             mAdapter.setTaks(tasks)
-
-            if (tasks.isEmpty()) {
-                emptyView.visibility = View.VISIBLE
-                recyclerView.visibility = View.GONE
-            }
-            else {
-                emptyView.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
-            }
         })
 
-        taskViewModel.taskResult.observe(this, Observer {
+        taskDetailViewModel.taskResult.observe(this, Observer {
             val taskResult = it ?: return@Observer
 
             if (taskResult.error != null) {
@@ -78,6 +71,7 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
 
         fab.setOnClickListener { view ->
             val intent = Intent(this, AddEditActivity::class.java)
+            intent.putExtra("parentId", taskId)
             startActivity(intent)
         }
     }
@@ -88,32 +82,6 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
 
     private fun showSuccess(successMsg: String) {
         Utils.showSnackBar(window.decorView.rootView, successMsg, isSticky = false)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_task_list, menu)
-
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_logout -> {
-
-            Utils.showDialog(this,null, "Are you sure you want to logout?", "Logout", true, DialogInterface.OnClickListener { _, _ ->
-                FirebaseAuth.getInstance().signOut()
-                finish()
-                val intent = Intent(this@TaskListActivity, LauncherActivity::class.java)
-                startActivity(intent)
-            })
-
-            true
-        }
-
-        else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
-            super.onOptionsItemSelected(item)
-        }
     }
 
     override fun onItemClick(task: DTOTask) {
@@ -131,7 +99,7 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
     override fun onDeleteClick(task: DTOTask) {
         Utils.showDialog(this, null, "Are you sure you want to delete this task? All of the sub tasks will also be deleted.",
             "Delete", true, DialogInterface.OnClickListener { _, _ ->
-                taskViewModel.deleteTask(task)
+                taskDetailViewModel.deleteTask(task)
             })
     }
 
@@ -156,7 +124,7 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
             val selectedItemStr = dataSource[item]
             val selectedStatus = Enum.TaskStatus.getValueFromString(selectedItemStr)
 
-            taskViewModel.changeTaskStatus(task, selectedStatus)
+            taskDetailViewModel.changeTaskStatus(task, selectedStatus)
 
             dialog.dismiss()
         })
