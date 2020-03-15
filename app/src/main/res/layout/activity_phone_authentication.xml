@@ -6,7 +6,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.authentication.login.LoginActivity">
+        tools:context=".ui.authentication.phone.PhoneAuthenticationActivity">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
@@ -23,59 +23,43 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <EditText
-            android:id="@+id/username"
+            android:id="@+id/phone_number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="140dp"
+            android:layout_marginTop="200dp"
             android:layout_marginEnd="24dp"
 
-            android:hint="@string/prompt_email"
-            android:inputType="textEmailAddress"
+            android:hint="Phone number"
+            android:inputType="phone"
+            android:maxLength="20"
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
-            android:id="@+id/password"
+            android:id="@+id/verification_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="200dp"
             android:layout_marginEnd="24dp"
 
-            android:hint="@string/prompt_password"
-            android:imeActionLabel="@string/action_sign_in_short"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword"
+            android:visibility="gone"
+            android:hint="Enter verification code"
+            android:inputType="number"
+            android:maxLength="6"
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username"/>
-
-    <EditText
-            android:id="@+id/confirm_password"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-
-            android:hint="@string/prompt_confirm_password"
-            android:imeActionLabel="@string/action_sign_in_short"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword"
-            android:selectAllOnFocus="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password"/>
+            app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/signup"
+            android:id="@+id/authenticate"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:text="Sign Up"
+            android:text="Continue"
             android:gravity="center"
             android:textColor="@color/colorWhite"
             android:textStyle="bold"
@@ -84,7 +68,25 @@
             android:backgroundTint="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/confirm_password"
+            app:layout_constraintTop_toBottomOf="@+id/phone_number"
+            android:layout_marginTop="@dimen/margin_very_large"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"/>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/verify_code"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:text="Verify"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:elevation="10dp"
+            android:visibility="gone"
+            android:backgroundTint="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/verification_code"
             android:layout_marginTop="@dimen/margin_large"
             android:layout_marginStart="@dimen/margin_large"
             android:layout_marginEnd="@dimen/margin_large"/>

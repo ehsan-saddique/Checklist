@@ -10,4 +10,5 @@
     <dimen name="margin_top">8dp</dimen>
     <dimen name="margin_bottom">8dp</dimen>
     <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_very_large">64dp</dimen>
 </resources>

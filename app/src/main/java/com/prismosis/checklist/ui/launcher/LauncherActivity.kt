@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
 import com.prismosis.checklist.R
-import com.prismosis.checklist.ui.login.LoginActivity
+import com.prismosis.checklist.ui.authentication.login.LoginActivity
 import com.prismosis.checklist.ui.task.TaskListActivity
 
 class LauncherActivity : AppCompatActivity() {

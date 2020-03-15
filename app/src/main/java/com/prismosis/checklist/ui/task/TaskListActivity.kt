@@ -167,4 +167,8 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
 
     }
 
+    override fun onBackPressed() {
+
+    }
+
 }

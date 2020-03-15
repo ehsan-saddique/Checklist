@@ -1,10 +1,9 @@
 package com.prismosis.checklist.data.repositories
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.android.gms.tasks.TaskExecutors
+import com.google.firebase.auth.*
 import com.prismosis.checklist.data.Result
+import java.util.concurrent.TimeUnit
 
 class UserRepository {
 
@@ -44,6 +43,25 @@ class UserRepository {
                 }
                 catch (ex: java.lang.Exception) {
                     callback.invoke(Result.Error(Exception("Error logging in: ${task.exception.toString()}")))
+                }
+            }
+        }
+    }
+
+    fun authenticate(authCredential: PhoneAuthCredential, callback: (Result<String>)->Unit) {
+
+        FirebaseAuth.getInstance().signInWithCredential(authCredential).addOnCompleteListener { task ->
+            if(task.isSuccessful){
+                callback.invoke(Result.Success("Verification successful"))
+            } else {
+                try {
+                    throw task.exception ?: java.lang.Exception("Unknown error")
+                }
+                catch (ex: FirebaseAuthInvalidCredentialsException) {
+                    callback.invoke(Result.Error(Exception("Verification code is invalid.")))
+                }
+                catch (ex: java.lang.Exception) {
+                    callback.invoke(Result.Error(Exception("Verification failed: ${task.exception.toString()}")))
                 }
             }
         }

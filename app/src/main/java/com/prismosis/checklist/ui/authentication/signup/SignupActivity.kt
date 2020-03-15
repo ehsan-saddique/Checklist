@@ -1,16 +1,13 @@
-package com.prismosis.checklist.ui.signup
+package com.prismosis.checklist.ui.authentication.signup
 
 import android.app.Activity
 import android.app.ProgressDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.*
 
 import com.prismosis.checklist.R

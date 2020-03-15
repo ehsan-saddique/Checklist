@@ -1,4 +1,4 @@
-package com.prismosis.checklist.ui.login
+package com.prismosis.checklist.ui.authentication.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,34 +8,39 @@ import com.prismosis.checklist.data.Result
 
 import com.prismosis.checklist.R
 import com.prismosis.checklist.data.repositories.UserRepository
+import com.prismosis.checklist.ui.authentication.AuthFormState
+import com.prismosis.checklist.ui.authentication.AuthResult
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    private val _loginForm = MutableLiveData<LoginFormState>()
-    val loginFormState: LiveData<LoginFormState> = _loginForm
+    private val _loginForm = MutableLiveData<AuthFormState>()
+    val loginFormState: LiveData<AuthFormState> = _loginForm
 
-    private val _loginResult = MutableLiveData<LoginResult>()
-    val loginResult: LiveData<LoginResult> = _loginResult
+    private val _loginResult = MutableLiveData<AuthResult>()
+    val loginResult: LiveData<AuthResult> = _loginResult
 
     fun login(username: String, password: String) {
 
         userRepository.login(username, password, callback = { result ->
             if (result is Result.Success) {
-                _loginResult.value = LoginResult(success = "Logged in successfully")
+                _loginResult.value =
+                    AuthResult(success = "Logged in successfully")
             }
             else {
-                _loginResult.value = LoginResult(error = result.toString())
+                _loginResult.value = AuthResult(error = (result as Result.Error).exception.localizedMessage)
             }
         })
     }
 
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
-            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
+            _loginForm.value =
+                AuthFormState(usernameError = R.string.invalid_username)
         } else if (!isPasswordValid(password)) {
-            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
+            _loginForm.value =
+                AuthFormState(passwordError = R.string.invalid_password)
         } else {
-            _loginForm.value = LoginFormState(isDataValid = true)
+            _loginForm.value = AuthFormState(isDataValid = true)
         }
     }
 

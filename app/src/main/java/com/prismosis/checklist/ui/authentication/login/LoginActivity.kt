@@ -1,21 +1,18 @@
-package com.prismosis.checklist.ui.login
+package com.prismosis.checklist.ui.authentication.login
 
-import android.app.Activity
 import android.app.ProgressDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.*
 
 import com.prismosis.checklist.R
-import com.prismosis.checklist.ui.signup.SignupActivity
+import com.prismosis.checklist.ui.authentication.phone.PhoneAuthenticationActivity
+import com.prismosis.checklist.ui.authentication.signup.SignupActivity
 import com.prismosis.checklist.ui.task.TaskListActivity
 import com.prismosis.checklist.utils.Utils
 
@@ -34,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
         val signup = findViewById<Button>(R.id.signup)
+        val phoneAuth = findViewById<Button>(R.id.phone_authentication)
 
         val progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Logging In")
@@ -94,6 +92,11 @@ class LoginActivity : AppCompatActivity() {
 
             signup.setOnClickListener {
                 val intent = Intent(this@LoginActivity, SignupActivity::class.java)
+                startActivity(intent)
+            }
+
+            phoneAuth.setOnClickListener {
+                val intent = Intent(this@LoginActivity, PhoneAuthenticationActivity::class.java)
                 startActivity(intent)
             }
         }
