@@ -48,8 +48,8 @@ class AddEditActivity : AppCompatActivity() {
 
             task = intent.extras?.get("task") as? DTOTask
             task?.let {
-                name.setText(task.name)
-                description.setText(task.description)
+                name.setText(task.taskName)
+                description.setText(task.taskDescription)
                 startDate.setText(Utils.stringFromDate(task.startDate))
                 endDate.setText(Utils.stringFromDate(task.endDate))
             }

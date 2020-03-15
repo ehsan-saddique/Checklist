@@ -3,6 +3,7 @@ package com.prismosis.checklist.data.repositories
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.auth.*
 import com.prismosis.checklist.data.Result
+import com.prismosis.checklist.utils.Utils
 import java.util.concurrent.TimeUnit
 
 class UserRepository {
@@ -65,5 +66,10 @@ class UserRepository {
                 }
             }
         }
+    }
+
+    fun logout() {
+        Utils.setIsTasksFetched(false)
+        FirebaseAuth.getInstance().signOut()
     }
 }

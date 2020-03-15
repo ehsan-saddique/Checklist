@@ -4,20 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.prismosis.checklist.data.model.DTOTask
-
-import com.prismosis.checklist.data.model.Task
 import com.prismosis.checklist.data.repositories.TaskRepository
 import com.prismosis.checklist.utils.Enum
+import com.prismosis.checklist.data.Result
+import com.prismosis.checklist.data.repositories.UserRepository
 import com.prismosis.checklist.utils.Utils
-import java.util.*
 
-class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
+class TaskViewModel(private val taskRepository: TaskRepository, private val userRepository: UserRepository) : ViewModel() {
 
     private val _taskResult = MutableLiveData<TaskResult>()
     val taskResult: LiveData<TaskResult> = _taskResult
 
     fun getAllTasks(): LiveData<List<DTOTask>> {
         return taskRepository.getAllTasks()
+    }
+
+    fun getDirtyTasksCount(): LiveData<Int> {
+        return taskRepository.getDirtyTasksCount()
     }
 
     fun deleteTask(task: DTOTask) {
@@ -36,8 +39,36 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
         })
     }
 
+    fun logoutUser() {
+        userRepository.logout()
+        deleteAllTasks()
+    }
+
     fun deleteAllTasks() {
         taskRepository.deleteAllTasks()
+    }
+
+    fun syncDataWithCloud() {
+        taskRepository.uploadTasksToCloud { result ->
+            if (result is Result.Success) {
+                _taskResult.value = TaskResult(success = result.data)
+            }
+            else {
+                _taskResult.value = TaskResult(error = (result as Result.Error).exception.localizedMessage)
+            }
+        }
+    }
+
+    fun fetchDataFromCloud() {
+        taskRepository.fetchTasksFromCloud { result ->
+            if (result is Result.Success) {
+                Utils.setIsTasksFetched(true)
+                _taskResult.value = TaskResult(success = result.data)
+            }
+            else {
+                _taskResult.value = TaskResult(error = (result as Result.Error).exception.localizedMessage)
+            }
+        }
     }
 
 

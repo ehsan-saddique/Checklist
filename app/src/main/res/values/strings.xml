@@ -19,4 +19,5 @@
     <string name="sign_up">Sign Up</string>
     <string name="or">OR</string>
     <string name="logout">Logout</string>
+    <string name="sync_data">Sync Data</string>
 </resources>

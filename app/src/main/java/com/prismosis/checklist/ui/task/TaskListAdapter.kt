@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
@@ -48,6 +49,7 @@ class TaskItemViewHolder(itemView: View, isTaskDetail: Boolean = false) : Recycl
     private var endDate: TextView
     private var subTasks: TextView
     private var taskStatus: TextView
+    private var isSynced: ImageView
     private var toolbar: Toolbar
 
     init {
@@ -57,6 +59,7 @@ class TaskItemViewHolder(itemView: View, isTaskDetail: Boolean = false) : Recycl
         endDate = itemView.findViewById(R.id.task_end_date)
         subTasks = itemView.findViewById(R.id.sub_tasks)
         taskStatus = itemView.findViewById(R.id.task_status)
+        isSynced = itemView.findViewById(R.id.is_synced)
         toolbar = itemView.findViewById(R.id.toolbar_task_item)
         if (isTaskDetail) {
             toolbar.inflateMenu(R.menu.menu_task_item_detail)
@@ -67,13 +70,14 @@ class TaskItemViewHolder(itemView: View, isTaskDetail: Boolean = false) : Recycl
     }
 
     fun bind(task: DTOTask, listener: ClickListener) {
-        taskName.setText(task.name)
-        taskDescription.setText(if (task.description.isNullOrEmpty()) "No description" else task.description)
+        taskName.setText(task.taskName)
+        taskDescription.setText(if (task.taskDescription.isNullOrEmpty()) "No description" else task.taskDescription)
         startDate.setText("Starts: " + Utils.stringFromDate(task.startDate))
         endDate.setText("Ends: " + Utils.stringFromDate(task.endDate))
         subTasks.setText("+ Sub Tasks: " + task.subTasksCount)
         taskStatus.setText(task.status.string)
         taskStatus.setBackgroundResource(task.status.drawableId)
+        isSynced.visibility = if (task.isDirty) View.VISIBLE else View.GONE
 
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {

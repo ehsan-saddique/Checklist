@@ -4,9 +4,11 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Handler
 import android.os.Looper
+import android.preference.PreferenceManager
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AlertDialog
@@ -104,4 +106,30 @@ object Utils {
 
         return date
     }
+
+    fun setIsTasksFetched(isFetched: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(ChecklistApplication.context()).edit().putBoolean("IsTasksFetched", isFetched).apply()
+    }
+
+    fun isTasksFetched(): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(ChecklistApplication.context()).getBoolean("IsTasksFetched", false)
+    }
+}
+
+//Extensions
+fun Boolean.toInt(): Int {
+    return if (this) {
+        1
+    }
+    else {
+        0
+    }
+}
+
+fun String.toDate(): Date {
+    return Date(this.toLong())
+}
+
+fun String.toBooleanFromInt(): Boolean {
+    return this == "1"
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
+import com.google.firebase.auth.FirebaseAuth
 import com.prismosis.checklist.data.Result
 
 import com.prismosis.checklist.R
@@ -21,10 +22,12 @@ class TaskUpdateViewModel(private val taskRepository: TaskRepository) : ViewMode
     val taskUpdateResult: LiveData<TaskResult> = _addEditResult
 
     fun addTask(parentId: String?, name: String, description: String, startDate: String, endDate: String) {
-        val task = DTOTask(0, null, UUID.randomUUID().toString(),
+        val task = DTOTask(0, UUID.randomUUID().toString(),
             parentId ?: "",
+            FirebaseAuth.getInstance().currentUser?.uid ?: "",
             name,
             description,
+            Date(),
             Utils.dateFromString(startDate),
             Utils.dateFromString(endDate),
             Enum.TaskStatus.PENDING)
@@ -35,10 +38,12 @@ class TaskUpdateViewModel(private val taskRepository: TaskRepository) : ViewMode
     }
 
     fun updateTask(task: DTOTask, name: String, description: String, startDate: String, endDate: String, status: Enum.TaskStatus) {
-        val taskToUpdate = DTOTask(0, task._id, task.id,
+        val taskToUpdate = DTOTask(0, task.taskId,
             task.parentId,
+            task.userId,
             name,
             description,
+            task.createdAt,
             Utils.dateFromString(startDate),
             Utils.dateFromString(endDate),
             status)

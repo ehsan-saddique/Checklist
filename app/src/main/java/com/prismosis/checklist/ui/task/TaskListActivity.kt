@@ -1,5 +1,6 @@
 package com.prismosis.checklist.ui.task
 
+import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -30,6 +31,8 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
 
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var mAdapter: TaskListAdapter
+    private lateinit var progressDialog: ProgressDialog
+    private var syncMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +42,13 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         val emptyView = findViewById<RelativeLayout>(R.id.empty_view)
+
+        progressDialog = ProgressDialog(this)
+        progressDialog.setTitle("Syncing data")
+        progressDialog.setMessage("Please wait..")
+        progressDialog.setCancelable(false)
+        progressDialog.isIndeterminate = true
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
 
         taskViewModel = ViewModelProviders.of(this, TaskViewModelFactory())
             .get(TaskViewModel::class.java)
@@ -63,9 +73,19 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
             }
         })
 
+        taskViewModel.getDirtyTasksCount().observe(this, Observer { count ->
+           if (count > 0) {
+               syncMenuItem?.setIcon(R.drawable.ic_sync_red_24dp)
+           }
+            else {
+               syncMenuItem?.setIcon(R.drawable.ic_sync_white_24dp)
+           }
+        })
+
         taskViewModel.taskResult.observe(this, Observer {
             val taskResult = it ?: return@Observer
 
+            progressDialog.hide()
             if (taskResult.error != null) {
                 showError(taskResult.error)
             }
@@ -74,6 +94,12 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
                 showSuccess(taskResult.success)
             }
         })
+
+        if (!Utils.isTasksFetched()) {
+            progressDialog.setTitle("Fetching data")
+            progressDialog.show()
+            taskViewModel.fetchDataFromCloud()
+        }
 
 
         fab.setOnClickListener { view ->
@@ -92,20 +118,26 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_task_list, menu)
-
+        syncMenuItem = menu?.findItem(R.id.action_sync_data)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_logout -> {
-
             Utils.showDialog(this,null, "Are you sure you want to logout? Tasks which have not been synced with server will be deleted.", "Logout", true, DialogInterface.OnClickListener { _, _ ->
-                FirebaseAuth.getInstance().signOut()
-                taskViewModel.deleteAllTasks()
+                taskViewModel.logoutUser()
                 finish()
                 val intent = Intent(this@TaskListActivity, LauncherActivity::class.java)
                 startActivity(intent)
             })
+
+            true
+        }
+        R.id.action_sync_data -> {
+
+            progressDialog.setTitle("Syncing data")
+            progressDialog.show()
+            taskViewModel.syncDataWithCloud()
 
             true
         }
@@ -119,7 +151,7 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
 
     override fun onItemClick(task: DTOTask) {
         val intent = Intent(this, TaskDetailActivity::class.java)
-        intent.putExtra("taskId", task.id)
+        intent.putExtra("taskId", task.taskId)
         startActivity(intent)
     }
 

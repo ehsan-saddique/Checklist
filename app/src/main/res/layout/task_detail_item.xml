@@ -81,6 +81,14 @@
                 android:background="@drawable/task_status_pending"
                 android:layout_height="20dp"/>
 
+        <ImageView
+                android:id="@+id/is_synced"
+                android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentEnd="true"
+                   android:layout_below="@id/task_end_date"
+                   android:src="@drawable/ic_sync_30dp"/>
+
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_below="@id/task_status"

@@ -86,7 +86,7 @@ class TaskDetailActivity : AppCompatActivity(), ClickListener {
 
     override fun onItemClick(task: DTOTask) {
         val intent = Intent(this, TaskDetailActivity::class.java)
-        intent.putExtra("taskId", task.id)
+        intent.putExtra("taskId", task.taskId)
         startActivity(intent)
     }
 
