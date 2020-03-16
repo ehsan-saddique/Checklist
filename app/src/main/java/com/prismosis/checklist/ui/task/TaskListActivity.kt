@@ -75,10 +75,10 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
 
         taskViewModel.getDirtyTasksCount().observe(this, Observer { count ->
            if (count > 0) {
-               syncMenuItem?.setIcon(R.drawable.ic_sync_red_24dp)
+               syncMenuItem?.setIcon(R.drawable.ic_sync_warning)
            }
             else {
-               syncMenuItem?.setIcon(R.drawable.ic_sync_white_24dp)
+               syncMenuItem?.setIcon(R.drawable.ic_sync_data)
            }
         })
 
@@ -138,6 +138,16 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
             progressDialog.setTitle("Syncing data")
             progressDialog.show()
             taskViewModel.syncDataWithCloud()
+
+            true
+        }
+        R.id.action_force_push -> {
+
+            Utils.showDialog(this,null, "This will upload all your changed tasks, but it will download all the data after that. So it might take some time to sync.", "Sync Everything", true, DialogInterface.OnClickListener { _, _ ->
+                progressDialog.setTitle("Syncing everything")
+                progressDialog.show()
+                taskViewModel.forceSyncData()
+            })
 
             true
         }

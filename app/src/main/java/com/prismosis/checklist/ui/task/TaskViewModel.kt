@@ -71,5 +71,24 @@ class TaskViewModel(private val taskRepository: TaskRepository, private val user
         }
     }
 
+    fun forceSyncData() {
+        taskRepository.uploadTasksToCloud { uploadResult ->
+            if (uploadResult is Result.Success) {
+                taskRepository.fetchTasksFromCloud { downloadResult ->
+                    if (downloadResult is Result.Success) {
+                        _taskResult.value = TaskResult(success = downloadResult.data)
+
+                        }
+                    else {
+                        _taskResult.value = TaskResult(error = (downloadResult as Result.Error).exception.localizedMessage)
+                    }
+                }
+            }
+            else {
+                _taskResult.value = TaskResult(error = (uploadResult as Result.Error).exception.localizedMessage)
+            }
+        }
+    }
+
 
 }

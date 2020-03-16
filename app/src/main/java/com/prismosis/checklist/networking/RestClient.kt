@@ -2,6 +2,9 @@ package com.prismosis.checklist.networking
 
 import com.google.firebase.auth.FirebaseAuth
 import com.prismosis.checklist.data.model.DTOTask
+import com.prismosis.checklist.data.model.TaskListServerResponse
+import com.prismosis.checklist.data.model.TaskServerResponse
+import com.prismosis.checklist.data.model.TaskServerResponseWrapper
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,10 +33,10 @@ class RestClient {
 
 interface TaskService {
     @GET("tasks")
-    fun getAllTasks(@Header("Authorization") authToken: String): Call<HashMap<String, Any>>
+    fun getAllTasks(@Header("Authorization") authToken: String): Call<TaskListServerResponse>
 
     @PATCH("tasks/{taskId}")
     fun insertOrUpdateTask(@Header("Authorization") authToken:
                            String, @Path("taskId")
-                            taskId: String, @Body parameters: HashMap<String, Any>): Call<HashMap<String, Any>>
+                            taskId: String, @Body parameters: TaskServerResponseWrapper): Call<TaskServerResponse>
 }

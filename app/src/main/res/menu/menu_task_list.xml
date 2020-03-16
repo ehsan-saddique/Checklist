@@ -3,7 +3,7 @@
 
     <item android:id="@+id/action_sync_data"
           android:title="@string/sync_data"
-          android:icon="@drawable/ic_sync_white_24dp"
+          android:icon="@drawable/ic_sync_data"
           app:showAsAction="ifRoom"
     />
 
@@ -11,6 +11,11 @@
           android:title="@string/logout"
           android:icon="@drawable/ic_logout"
           app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_force_push"
+          android:title="@string/force_push"
+          android:icon="@drawable/ic_logout"
+          app:showAsAction="never"/>
 
 
 </menu>

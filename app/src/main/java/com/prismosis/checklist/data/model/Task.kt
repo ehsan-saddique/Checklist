@@ -91,27 +91,13 @@ data class DTOTask(var subTasksCount: Int?,
             return arrayOfNulls(size)
         }
 
-        fun getTaskFromParameters(parameters: Map<String, Any>): DTOTask {
-            val STRING_TYPE = "stringValue"
-            val INTEGER_TYPE = "integerValue"
-
-            val taskIdMap    = (parameters.get("taskId")    as? Map<String, String>)?.get(STRING_TYPE) ?: ""
-            val parentIdMap  = (parameters.get("parentId")  as? Map<String, String>)?.get(STRING_TYPE) ?: ""
-            val userIdMap    = (parameters.get("userId")    as? Map<String, String>)?.get(STRING_TYPE) ?: ""
-            val taskNameMap  = (parameters.get("taskName")  as? Map<String, String>)?.get(STRING_TYPE) ?: ""
-            val createdAtMap = (parameters.get("createdAt") as? Map<String, String>)?.get(INTEGER_TYPE) ?: ""
-            val startDateMap = (parameters.get("startDate") as? Map<String, String>)?.get(INTEGER_TYPE) ?: ""
-            val endDateMap   = (parameters.get("endDate")   as? Map<String, String>)?.get(INTEGER_TYPE) ?: ""
-            val statusMap    = (parameters.get("status")    as? Map<String, String>)?.get(INTEGER_TYPE) ?: ""
-            val isDirtyMap   = (parameters.get("isDirty")   as? Map<String, String>)?.get(INTEGER_TYPE) ?: ""
-            val isDeletedMap = (parameters.get("isDeleted") as? Map<String, String>)?.get(INTEGER_TYPE) ?: ""
-            val taskDescriptionMap = (parameters.get("taskDescription") as? Map<String, String>)?.get(STRING_TYPE) ?: ""
-
-            val task = DTOTask(0, taskIdMap, parentIdMap,
-                userIdMap, taskNameMap, taskDescriptionMap,
-                createdAtMap.toDate(), startDateMap.toDate(),
-                endDateMap.toDate(), Enum.TaskStatus.getValueFromInt(statusMap.toInt()),
-                false, isDeletedMap.toBooleanFromInt())
+        fun getTaskFromServerResponse(serverTask: TaskServerResponse): DTOTask {
+            val status = Enum.TaskStatus.getValueFromInt(serverTask.status.integerValue.toInt())
+            val task = DTOTask(0, serverTask.taskId.stringValue, serverTask.parentId.stringValue,
+                serverTask.userId.stringValue, serverTask.taskName.stringValue, serverTask.taskDescription.stringValue,
+                serverTask.createdAt.integerValue.toDate(), serverTask.startDate.integerValue.toDate(),
+                serverTask.endDate.integerValue.toDate(), status, false,
+                serverTask.isDeleted.integerValue.toBooleanFromInt())
 
             return task
         }
@@ -121,39 +107,21 @@ data class DTOTask(var subTasksCount: Int?,
         return Task(taskId, parentId, userId, createdAt, taskName, taskDescription, startDate, endDate, status, isDirty, isDeleted)
     }
 
-    fun getTaskParameters(): HashMap<String, Any> {
-        val STRING_TYPE = "stringValue"
-        val INTEGER_TYPE = "integerValue"
+    fun toServerResponse(): TaskServerResponse {
+        val serverTask = TaskServerResponse()
+        serverTask.taskId.stringValue = taskId
+        serverTask.parentId.stringValue = parentId
+        serverTask.userId.stringValue = userId
+        serverTask.taskName.stringValue = taskName
+        serverTask.taskDescription.stringValue = taskDescription ?: ""
+        serverTask.createdAt.integerValue = createdAt.time.toString()
+        serverTask.startDate.integerValue = startDate.time.toString()
+        serverTask.endDate.integerValue = endDate.time.toString()
+        serverTask.status.integerValue = status.value.toString()
+        serverTask.isDirty.integerValue = "0"
+        serverTask.isDeleted.integerValue = isDeleted.toInt().toString()
 
-        val parameters = HashMap<String, Any>()
-        val taskIdMap: HashMap<String, String> = hashMapOf    (STRING_TYPE  to  taskId)
-        val parentIdMap: HashMap<String, String> = hashMapOf  (STRING_TYPE  to  parentId)
-        val userIdMap: HashMap<String, String> = hashMapOf    (STRING_TYPE  to  userId)
-        val taskNameMap: HashMap<String, String> = hashMapOf  (STRING_TYPE  to  taskName)
-        val createdAtMap: HashMap<String, String> = hashMapOf (INTEGER_TYPE to  createdAt.time.toString())
-        val startDateMap: HashMap<String, String> = hashMapOf (INTEGER_TYPE to  startDate.time.toString())
-        val endDateMap: HashMap<String, String> = hashMapOf   (INTEGER_TYPE to  endDate.time.toString())
-        val statusMap: HashMap<String, String> = hashMapOf    (INTEGER_TYPE to  status.value.toString())
-        val isDirtyMap: HashMap<String, String> = hashMapOf   (INTEGER_TYPE to  "0")
-        val isDeletedMap: HashMap<String, String> = hashMapOf (INTEGER_TYPE to  isDeleted.toInt().toString())
-        val taskDescriptionMap: HashMap<String, String> = hashMapOf (STRING_TYPE to (taskDescription ?: ""))
-
-        parameters["taskId"] = taskIdMap
-        parameters["parentId"] = parentIdMap
-        parameters["userId"] = userIdMap
-        parameters["taskName"] = taskNameMap
-        parameters["createdAt"] = createdAtMap
-        parameters["startDate"] = startDateMap
-        parameters["endDate"] = endDateMap
-        parameters["status"] = statusMap
-        parameters["isDirty"] = isDirtyMap
-        parameters["isDeleted"] = isDeletedMap
-        parameters["taskDescription"] = taskDescriptionMap
-
-        val finalParameters = HashMap<String, Any>()
-        finalParameters["fields"] = parameters
-
-        return finalParameters
-
+        return serverTask
     }
+
 }

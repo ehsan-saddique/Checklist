@@ -6,6 +6,8 @@ import com.prismosis.checklist.data.Result
 import com.prismosis.checklist.data.database.AppDatabase
 import com.prismosis.checklist.data.model.DTOTask
 import com.prismosis.checklist.data.model.TaskDao
+import com.prismosis.checklist.data.model.TaskListServerResponse
+import com.prismosis.checklist.data.model.TaskServerResponseWrapper
 import com.prismosis.checklist.networking.RestClient
 import com.prismosis.checklist.utils.Enum
 import kotlinx.coroutines.Dispatchers
@@ -136,7 +138,9 @@ class TaskRepository(database: AppDatabase, restClient: RestClient) {
 
                     val dirtyTasks = taskDao.getDirtyTasks()
                     for (task in dirtyTasks) {
-                        val apiCall = mRestClient.getTaskService().insertOrUpdateTask(authToken, task.taskId, task.getTaskParameters())
+                        val serverRequest = TaskServerResponseWrapper()
+                        serverRequest.fields = task.toServerResponse()
+                        val apiCall = mRestClient.getTaskService().insertOrUpdateTask(authToken, task.taskId, serverRequest)
 
                         val response = apiCall.execute()
                         if (response.isSuccessful) {
@@ -183,19 +187,9 @@ class TaskRepository(database: AppDatabase, restClient: RestClient) {
 
                     val response = apiCall.execute()
                     if (response.isSuccessful) {
-                        val documents = response.body()?.get("documents") as? List<Map<String, Any>>
-                        if (documents == null) {
-                            isSuccess = false
-                            errorMessage = "Couldn't establish connection with server"
-                        }
-                        else {
-                            for (document in documents) {
-                                val parameters = document.get("fields") as? Map<String, Any>
-                                parameters?.let {
-                                    val dtoTask = DTOTask.getTaskFromParameters(it)
-                                    taskDao.insertOrUpdate(dtoTask.getTaskEntity())
-                                }
-                            }
+                        for (document in response.body()?.documents ?: ArrayList()) {
+                            val dtoTask = DTOTask.getTaskFromServerResponse(document.fields)
+                            taskDao.insertOrUpdate(dtoTask.getTaskEntity())
                         }
                     }
                     else {
