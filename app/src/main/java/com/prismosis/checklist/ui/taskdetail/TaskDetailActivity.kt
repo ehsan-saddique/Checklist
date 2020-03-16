@@ -61,11 +61,11 @@ class TaskDetailActivity : AppCompatActivity(), ClickListener {
             val taskResult = it ?: return@Observer
 
             if (taskResult.error != null) {
-                showError(taskResult.error)
+                showError(taskResult.error!!)
             }
 
             if (taskResult.success != null) {
-                showSuccess(taskResult.success)
+                showSuccess(taskResult.success!!)
             }
         })
 

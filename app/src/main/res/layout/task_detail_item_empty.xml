@@ -6,8 +6,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-    <ImageView android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
+    <ImageView android:layout_width="@dimen/size_task_empty_image"
+               android:layout_height="@dimen/size_task_empty_image"
                android:id="@+id/imageView"
                android:layout_centerInParent="true"
                android:src="@drawable/ic_empty_tasks"
@@ -19,7 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_large"
-            android:id="@+id/textView" android:textSize="20sp"
+            android:id="@+id/textView"
+            android:textSize="@dimen/font_task_empty_title"
             android:layout_centerHorizontal="true"
             android:textStyle="bold"/>
 </RelativeLayout>

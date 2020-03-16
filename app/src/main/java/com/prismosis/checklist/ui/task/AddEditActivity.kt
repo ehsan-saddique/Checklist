@@ -72,11 +72,11 @@ class AddEditActivity : AppCompatActivity() {
             val taskResult = it ?: return@Observer
 
             if (taskResult.error != null) {
-                showError(taskResult.error)
+                showError(taskResult.error!!)
             }
 
             if (taskResult.success != null) {
-                onSuccess(taskResult.success)
+                onSuccess(taskResult.success!!)
             }
         })
 

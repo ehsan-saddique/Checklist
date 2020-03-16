@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="140dp"
+            android:layout_marginTop="@dimen/margin_login_top"
             android:layout_marginEnd="24dp"
 
             android:hint="@string/prompt_email"

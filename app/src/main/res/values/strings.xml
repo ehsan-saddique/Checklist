@@ -20,5 +20,5 @@
     <string name="or">OR</string>
     <string name="logout">Logout</string>
     <string name="sync_data">Sync data</string>
-    <string name="force_push">Sync everything (Experimental)</string>
+    <string name="force_push">Sync everything</string>
 </resources>

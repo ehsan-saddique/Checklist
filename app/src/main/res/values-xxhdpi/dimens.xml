@@ -11,16 +11,7 @@
     <dimen name="margin_bottom">8dp</dimen>
     <dimen name="margin_large">32dp</dimen>
     <dimen name="margin_very_large">64dp</dimen>
-    <dimen name="margin_login_top">90dp</dimen>
-    <dimen name="margin_signup_top">90dp</dimen>
-    <dimen name="margin_mob_auth_top">110dp</dimen>
-
-    <dimen name="font_task_list_heading">20sp</dimen>
-    <dimen name="font_task_list_sub_heading">13sp</dimen>
-    <dimen name="font_task_list_status">12sp</dimen>
-    <dimen name="font_task_detail_status_padding">1sp</dimen>
-    <dimen name="font_task_empty_title">16sp</dimen>
-
-    <dimen name="size_task_empty_image">50dp</dimen>
-    <dimen name="size_task_status">20dp</dimen>
+    <dimen name="margin_login_top">180dp</dimen>
+    <dimen name="margin_signup_top">180dp</dimen>
+    <dimen name="margin_mob_auth_top">220dp</dimen>
 </resources>

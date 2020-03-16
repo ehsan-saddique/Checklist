@@ -9,20 +9,22 @@
     <DatePicker
             android:id="@+id/date_picker"
             android:layout_width="match_parent"
-            android:calendarViewShown="true"
-            android:spinnersShown="false"
+            android:calendarViewShown="false"
+            android:spinnersShown="true"
+            android:datePickerMode="spinner"
             android:layout_weight="4"
             android:layout_height="0dp" />
 
     <TimePicker
             android:id="@+id/time_picker"
             android:layout_weight="4"
+            android:timePickerMode="spinner"
             android:layout_width="match_parent"
             android:layout_height="0dp" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/date_time_set"
-            android:layout_weight="1"
+            android:layout_weight="1.4"
             android:layout_width="match_parent"
             android:text="Set"
             android:layout_height="0dp"

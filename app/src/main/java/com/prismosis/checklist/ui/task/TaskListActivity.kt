@@ -85,16 +85,16 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
            }
         })
 
-        taskViewModel.taskResult.observe(this, Observer {
-            val taskResult = it ?: return@Observer
+        taskViewModel.taskResult.observe(this, Observer { taskResult ->
 
-            progressDialog.hide()
             if (taskResult.error != null) {
-                showError(taskResult.error)
+                progressDialog.dismiss()
+                showError(taskResult.error!!)
             }
 
             if (taskResult.success != null) {
-                showSuccess(taskResult.success)
+                progressDialog.dismiss()
+                showSuccess(taskResult.success!!)
             }
         })
 
@@ -102,6 +102,11 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
             progressDialog.setTitle("Fetching data")
             progressDialog.show()
             taskViewModel.fetchDataFromCloud()
+        }
+
+        if (savedInstanceState?.getBoolean("isDialogShowing", false) ?: false) {
+            savedInstanceState?.putBoolean("isDialogShowing", false)
+            progressDialog.show()
         }
 
 
@@ -138,7 +143,6 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
         }
         R.id.action_sync_data -> {
 
-            progressDialog.setTitle("Syncing data")
             progressDialog.show()
             taskViewModel.syncDataWithCloud()
 
@@ -147,7 +151,6 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
         R.id.action_force_push -> {
 
             Utils.showDialog(this,null, "This will upload all your changed tasks, but it will download all the data after that. So it might take some time to sync.", "Sync Everything", true, DialogInterface.OnClickListener { _, _ ->
-                progressDialog.setTitle("Syncing everything")
                 progressDialog.show()
                 taskViewModel.forceSyncData()
             })
@@ -214,6 +217,13 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
 
     override fun onBackPressed() {
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("isDialogShowing", progressDialog.isShowing)
+        taskViewModel.taskResult.value?.error = null
+        taskViewModel.taskResult.value?.success = null
     }
 
 }

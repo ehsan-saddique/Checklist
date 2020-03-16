@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="@dimen/margin_mob_auth_top"
             android:layout_marginEnd="24dp"
 
             android:hint="Phone number"
@@ -43,7 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="@dimen/margin_mob_auth_top"
             android:layout_marginEnd="24dp"
 
             android:visibility="gone"
