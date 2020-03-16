@@ -19,11 +19,14 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.prismosis.checklist.R
 import com.prismosis.checklist.ui.authentication.signup.afterTextChanged
 import com.prismosis.checklist.ui.task.TaskListActivity
+import com.prismosis.checklist.utils.ChecklistApplication
 import com.prismosis.checklist.utils.Utils
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 class PhoneAuthenticationActivity : AppCompatActivity(), PhoneCallbacks.PhoneCallbacksListener {
-    private lateinit var phoneAuthViewModel: PhoneAuthViewModel
+    @Inject
+    lateinit var phoneAuthViewModel: PhoneAuthViewModel
     private var storedVerificationId: String? = null
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     private lateinit var progressDialog: ProgressDialog
@@ -40,6 +43,7 @@ class PhoneAuthenticationActivity : AppCompatActivity(), PhoneCallbacks.PhoneCal
         setContentView(R.layout.activity_phone_authentication)
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.title = "Phone Verification"
+        ChecklistApplication.instance?.appComponent?.inject(this)
 
         phoneNumber = findViewById<EditText>(R.id.phone_number)
         btnAuthenticate = findViewById<Button>(R.id.authenticate)

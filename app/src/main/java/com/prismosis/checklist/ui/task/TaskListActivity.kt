@@ -24,12 +24,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.prismosis.checklist.data.model.DTOTask
 import com.prismosis.checklist.ui.taskdetail.TaskDetailActivity
+import com.prismosis.checklist.utils.ChecklistApplication
 import com.prismosis.checklist.utils.Enum
+import javax.inject.Inject
 
 
 class TaskListActivity : AppCompatActivity(), ClickListener {
 
-    private lateinit var taskViewModel: TaskViewModel
+    @Inject lateinit var taskViewModel: TaskViewModel
     private lateinit var mAdapter: TaskListAdapter
     private lateinit var progressDialog: ProgressDialog
     private var syncMenuItem: MenuItem? = null
@@ -39,6 +41,7 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
         setContentView(R.layout.activity_task_list)
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.title = "Checklist"
+        ChecklistApplication.instance?.appComponent?.inject(this)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         val emptyView = findViewById<RelativeLayout>(R.id.empty_view)
@@ -50,8 +53,8 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
         progressDialog.isIndeterminate = true
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
 
-        taskViewModel = ViewModelProviders.of(this, TaskViewModelFactory())
-            .get(TaskViewModel::class.java)
+//        taskViewModel = ViewModelProviders.of(this, TaskViewModelFactory())
+//            .get(TaskViewModel::class.java)
 
         mAdapter = TaskListAdapter(ArrayList<DTOTask>(), this)
         recyclerView.apply {

@@ -14,11 +14,14 @@ import com.prismosis.checklist.R
 import com.prismosis.checklist.ui.authentication.phone.PhoneAuthenticationActivity
 import com.prismosis.checklist.ui.authentication.signup.SignupActivity
 import com.prismosis.checklist.ui.task.TaskListActivity
+import com.prismosis.checklist.utils.ChecklistApplication
 import com.prismosis.checklist.utils.Utils
+import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var loginViewModel: LoginViewModel
+    @Inject
+    lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.title = "Login"
+        ChecklistApplication.instance?.appComponent?.inject(this)
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
@@ -39,9 +43,6 @@ class LoginActivity : AppCompatActivity() {
         progressDialog.setCancelable(false)
         progressDialog.isIndeterminate = true
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-
-        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer

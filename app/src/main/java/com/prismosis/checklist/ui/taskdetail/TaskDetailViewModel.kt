@@ -9,8 +9,9 @@ import com.prismosis.checklist.data.model.Task
 import com.prismosis.checklist.data.repositories.TaskRepository
 import com.prismosis.checklist.ui.task.TaskResult
 import com.prismosis.checklist.utils.Enum
+import javax.inject.Inject
 
-class TaskDetailViewModel(private val taskRepository: TaskRepository) : ViewModel() {
+class TaskDetailViewModel @Inject constructor (private val taskRepository: TaskRepository) : ViewModel() {
 
     private val _taskDetailResult = MutableLiveData<TaskResult>()
     val taskResult: LiveData<TaskResult> = _taskDetailResult

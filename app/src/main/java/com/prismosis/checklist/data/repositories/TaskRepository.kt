@@ -16,12 +16,13 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 /**
  * Created by Ehsan Saddique on 2020-03-13
  */
 
-class TaskRepository(database: AppDatabase, restClient: RestClient) {
+class TaskRepository @Inject constructor(database: AppDatabase, restClient: RestClient) {
 
     private var taskDao: TaskDao
     private var mRestClient: RestClient

@@ -17,9 +17,10 @@ import javax.xml.datatype.DatatypeConstants.SECONDS
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.PhoneAuthProvider.verifyPhoneNumber
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
-class PhoneAuthViewModel(private val userRepository: UserRepository) : ViewModel() {
+class PhoneAuthViewModel @Inject constructor (private val userRepository: UserRepository) : ViewModel() {
 
     private val _phoneAuthForm = MutableLiveData<AuthFormState>()
     val phoneAuthFormState: LiveData<AuthFormState> = _phoneAuthForm

@@ -15,13 +15,16 @@ import android.widget.DatePicker
 import androidx.appcompat.app.AlertDialog
 import com.prismosis.checklist.data.model.DTOTask
 import com.prismosis.checklist.data.model.Task
+import com.prismosis.checklist.utils.ChecklistApplication
 import com.prismosis.checklist.utils.Enum
 import java.util.*
+import javax.inject.Inject
 
 
 class AddEditActivity : AppCompatActivity() {
 
-    private lateinit var taskUpdateViewModel: TaskUpdateViewModel
+    @Inject
+    lateinit var taskUpdateViewModel: TaskUpdateViewModel
     private lateinit var startDate: EditText
     private lateinit var endDate: EditText
     private var isEditScreen = false
@@ -32,6 +35,7 @@ class AddEditActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_edit)
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.title = "Add Task"
+        ChecklistApplication.instance?.appComponent?.inject(this)
 
         val name = findViewById<EditText>(R.id.task_name)
         val description = findViewById<EditText>(R.id.task_description)

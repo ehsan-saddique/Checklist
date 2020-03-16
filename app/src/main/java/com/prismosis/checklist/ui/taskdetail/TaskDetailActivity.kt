@@ -23,12 +23,15 @@ import androidx.appcompat.app.AlertDialog
 import com.prismosis.checklist.data.model.DTOTask
 import com.prismosis.checklist.ui.task.AddEditActivity
 import com.prismosis.checklist.ui.task.ClickListener
+import com.prismosis.checklist.utils.ChecklistApplication
 import com.prismosis.checklist.utils.Enum
+import javax.inject.Inject
 
 
 class TaskDetailActivity : AppCompatActivity(), ClickListener {
 
-    private lateinit var taskDetailViewModel: TaskDetailViewModel
+    @Inject
+    lateinit var taskDetailViewModel: TaskDetailViewModel
     private lateinit var mAdapter: TaskDetailAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,14 +39,12 @@ class TaskDetailActivity : AppCompatActivity(), ClickListener {
         setContentView(R.layout.activity_task_detail)
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.title = "Task Detail"
+        ChecklistApplication.instance?.appComponent?.inject(this)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         val emptyView = findViewById<RelativeLayout>(R.id.empty_view)
 
         val taskId = intent.extras?.getString("taskId") ?: ""
-
-        taskDetailViewModel = ViewModelProviders.of(this, TaskDetailViewModelFactory())
-            .get(TaskDetailViewModel::class.java)
 
         mAdapter = TaskDetailAdapter(ArrayList<DTOTask>(), this)
         recyclerView.apply {

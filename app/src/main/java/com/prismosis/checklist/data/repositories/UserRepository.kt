@@ -5,12 +5,13 @@ import com.google.firebase.auth.*
 import com.prismosis.checklist.data.Result
 import com.prismosis.checklist.utils.Utils
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class UserRepository {
+class UserRepository @Inject constructor(val firebaseAuth: FirebaseAuth) {
 
     fun signup(username: String, password: String, callback: (Result<String>)->Unit) {
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(username, password).addOnCompleteListener{ task ->
+        firebaseAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener{ task ->
             if(task.isSuccessful){
                 callback.invoke(Result.Success("You have signed up successfully."))
             } else {
@@ -29,7 +30,7 @@ class UserRepository {
 
     fun login(username: String, password: String, callback: (Result<String>)->Unit) {
 
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(username, password).addOnCompleteListener{ task ->
+        firebaseAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener{ task ->
             if(task.isSuccessful){
                 callback.invoke(Result.Success("Logged in successfully"))
             } else {
@@ -51,7 +52,7 @@ class UserRepository {
 
     fun authenticate(authCredential: PhoneAuthCredential, callback: (Result<String>)->Unit) {
 
-        FirebaseAuth.getInstance().signInWithCredential(authCredential).addOnCompleteListener { task ->
+        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener { task ->
             if(task.isSuccessful){
                 callback.invoke(Result.Success("Verification successful"))
             } else {

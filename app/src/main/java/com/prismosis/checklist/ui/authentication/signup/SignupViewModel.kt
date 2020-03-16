@@ -10,8 +10,9 @@ import com.prismosis.checklist.R
 import com.prismosis.checklist.data.repositories.UserRepository
 import com.prismosis.checklist.ui.authentication.AuthFormState
 import com.prismosis.checklist.ui.authentication.AuthResult
+import javax.inject.Inject
 
-class SignupViewModel(private val userRepository: UserRepository) : ViewModel() {
+class SignupViewModel @Inject constructor (private val userRepository: UserRepository) : ViewModel() {
 
     private val _signupForm = MutableLiveData<AuthFormState>()
     val signupFormState: LiveData<AuthFormState> = _signupForm

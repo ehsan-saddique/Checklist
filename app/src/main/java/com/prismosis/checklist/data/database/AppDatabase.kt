@@ -8,6 +8,7 @@ import com.prismosis.checklist.data.model.Task
 import com.prismosis.checklist.data.model.TaskDao
 import com.prismosis.checklist.utils.ChecklistApplication
 import com.prismosis.checklist.utils.TypeConverter
+import javax.inject.Inject
 
 /**
  * Created by Ehsan Saddique on 2020-03-13

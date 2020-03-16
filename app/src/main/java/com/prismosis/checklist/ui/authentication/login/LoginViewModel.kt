@@ -7,11 +7,13 @@ import android.util.Patterns
 import com.prismosis.checklist.data.Result
 
 import com.prismosis.checklist.R
+import com.prismosis.checklist.data.repositories.TaskRepository
 import com.prismosis.checklist.data.repositories.UserRepository
 import com.prismosis.checklist.ui.authentication.AuthFormState
 import com.prismosis.checklist.ui.authentication.AuthResult
+import javax.inject.Inject
 
-class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<AuthFormState>()
     val loginFormState: LiveData<AuthFormState> = _loginForm

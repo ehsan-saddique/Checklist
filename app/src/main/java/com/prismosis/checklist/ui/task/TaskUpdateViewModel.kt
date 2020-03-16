@@ -15,8 +15,9 @@ import com.prismosis.checklist.data.repositories.UserRepository
 import com.prismosis.checklist.utils.Enum
 import com.prismosis.checklist.utils.Utils
 import java.util.*
+import javax.inject.Inject
 
-class TaskUpdateViewModel(private val taskRepository: TaskRepository) : ViewModel() {
+class TaskUpdateViewModel @Inject constructor (private val taskRepository: TaskRepository) : ViewModel() {
 
     private val _addEditResult = MutableLiveData<TaskResult>()
     val taskUpdateResult: LiveData<TaskResult> = _addEditResult

@@ -11,11 +11,14 @@ import android.text.TextWatcher
 import android.widget.*
 
 import com.prismosis.checklist.R
+import com.prismosis.checklist.utils.ChecklistApplication
 import com.prismosis.checklist.utils.Utils
+import javax.inject.Inject
 
 class SignupActivity : AppCompatActivity() {
 
-    private lateinit var signupViewModel: SignupViewModel
+    @Inject
+    lateinit var signupViewModel: SignupViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +26,7 @@ class SignupActivity : AppCompatActivity() {
         setContentView(R.layout.activity_signup)
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.title = "Sign Up"
+        ChecklistApplication.instance?.appComponent?.inject(this)
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
