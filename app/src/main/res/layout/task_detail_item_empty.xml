@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/margin_very_large"
+                android:paddingBottom="@dimen/margin_very_large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/imageView"
+               android:layout_centerInParent="true"
+               android:src="@drawable/ic_empty_tasks"
+    />
+
+    <TextView
+            android:text="No sub tasks against this task."
+            android:layout_below="@id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:id="@+id/textView" android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"/>
+</RelativeLayout>

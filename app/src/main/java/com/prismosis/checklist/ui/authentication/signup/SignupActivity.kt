@@ -40,9 +40,6 @@ class SignupActivity : AppCompatActivity() {
         progressDialog.isIndeterminate = true
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
 
-        signupViewModel = ViewModelProviders.of(this, SignupViewModelFactory())
-            .get(SignupViewModel::class.java)
-
         signupViewModel.signupFormState.observe(this, Observer {
             val signupState = it ?: return@Observer
 

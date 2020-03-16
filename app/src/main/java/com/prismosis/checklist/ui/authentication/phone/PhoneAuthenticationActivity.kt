@@ -60,9 +60,6 @@ class PhoneAuthenticationActivity : AppCompatActivity(), PhoneCallbacks.PhoneCal
         progressDialog.isIndeterminate = true
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
 
-        phoneAuthViewModel = ViewModelProviders.of(this, PhoneAuthViewModelFactory())
-            .get(PhoneAuthViewModel::class.java)
-
 
         phoneAuthViewModel.authResult.observe(this, Observer {
             val signupResult = it ?: return@Observer

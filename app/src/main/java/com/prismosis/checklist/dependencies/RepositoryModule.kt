@@ -1,5 +1,6 @@
 package com.prismosis.checklist.dependencies
 
+import com.google.firebase.auth.FirebaseAuth
 import com.prismosis.checklist.data.database.AppDatabase
 import com.prismosis.checklist.data.repositories.TaskRepository
 import com.prismosis.checklist.data.repositories.UserRepository
@@ -16,7 +17,7 @@ import javax.inject.Singleton
 class RepositoryModule {
     @Singleton
     @Provides
-    fun provideUserRepository(): UserRepository = UserRepository()
+    fun provideUserRepository(firebaseAuth: FirebaseAuth): UserRepository = UserRepository(firebaseAuth)
 
     @Singleton
     @Provides

@@ -19,11 +19,19 @@ import com.prismosis.checklist.utils.Utils
  */
 
 class TaskDetailAdapter(private var tasks: List<DTOTask>, private var listener: ClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val VIEW_TYPE_TASK = 1
+    private val VIEW_TYPE_SUB_TASK = 2
+    private val VIEW_TYPE_EMPTY_SUB_TASK = 3
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        if (viewType == 1) {
+        if (viewType == VIEW_TYPE_TASK) {
             val itemView = inflater.inflate(R.layout.task_detail_item, parent, false)
             return TaskItemViewHolder(itemView, true)
+        }
+        else if (viewType == VIEW_TYPE_EMPTY_SUB_TASK) {
+            val itemView = inflater.inflate(R.layout.task_detail_item_empty, parent, false)
+            return SubTaskEmptyViewHolder(itemView)
         }
         else {
             val itemView = inflater.inflate(R.layout.task_item, parent, false)
@@ -32,20 +40,34 @@ class TaskDetailAdapter(private var tasks: List<DTOTask>, private var listener: 
     }
 
     override fun getItemCount(): Int {
-        return tasks.size
+        if (tasks.size == 1) {
+            return tasks.size + 1
+        }
+        else {
+            return tasks.size
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val task = tasks.get(position)
-        val taskHolder = holder as TaskItemViewHolder
-        taskHolder.bind(task, listener)
+        if (position == 1 && tasks.size == 1) {
+            //Bind empty sub tasks view
+        }
+        else {
+            val task = tasks.get(position)
+            val taskHolder = holder as TaskItemViewHolder
+            taskHolder.bind(task, listener)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (position == 0) {
-            1
-        } else {
-            2
+            VIEW_TYPE_TASK
+        }
+        else if (position == 1 && tasks.size == 1) {
+            VIEW_TYPE_EMPTY_SUB_TASK
+        }
+        else {
+            VIEW_TYPE_SUB_TASK
         }
     }
 
@@ -55,55 +77,9 @@ class TaskDetailAdapter(private var tasks: List<DTOTask>, private var listener: 
     }
 
 
-//    class TaskItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        private var taskName: TextView
-//        private var taskDescription: TextView
-//        private var startDate: TextView
-//        private var endDate: TextView
-//        private var subTasks: TextView
-//        private var taskStatus: TextView
-//        private var toolbar: Toolbar
-//
-//        init {
-//            taskName = itemView.findViewById(R.id.task_name)
-//            taskDescription = itemView.findViewById(R.id.task_description)
-//            startDate = itemView.findViewById(R.id.task_start_date)
-//            endDate = itemView.findViewById(R.id.task_end_date)
-//            subTasks = itemView.findViewById(R.id.sub_tasks)
-//            taskStatus = itemView.findViewById(R.id.task_status)
-//            toolbar = itemView.findViewById(R.id.toolbar_task_item)
-//            toolbar.inflateMenu(R.menu.menu_task_item)
-//        }
-//
-//        fun bind(task: DTOTask, listener: ClickListener) {
-//            taskName.setText(task.name)
-//            taskDescription.setText(if (task.description.isNullOrEmpty()) "No description" else task.description)
-//            startDate.setText("Starts: " + Utils.stringFromDate(task.startDate))
-//            endDate.setText("Ends: " + Utils.stringFromDate(task.endDate))
-//            subTasks.setText("Sub Tasks: 0")
-//            taskStatus.setText(task.status.string)
-//            taskStatus.setBackgroundResource(task.status.drawableId)
-//
-//            toolbar.setOnMenuItemClickListener { menuItem ->
-//                when (menuItem.itemId) {
-//                    R.id.action_edit -> {
-//                        listener.onEditClick(task)
-//                        true
-//                    }
-//                    R.id.action_change_status -> {
-//                        listener.onChangeStatusClick(task)
-//                        true
-//                    }
-//                    R.id.action_delete -> {
-//                        listener.onDeleteClick(task)
-//                        true
-//                    }
-//                    else -> {
-//                        false
-//                    }
-//                }
-//            }
-//        }
-//    }
+    class SubTaskEmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        init {}
+    }
 
 }
