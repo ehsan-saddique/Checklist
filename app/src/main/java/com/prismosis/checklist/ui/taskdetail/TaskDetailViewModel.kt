@@ -25,6 +25,7 @@ class TaskDetailViewModel @Inject constructor (private val taskRepository: TaskR
         task.isDirty = true
         taskRepository.updateTask(task, callback = { result ->
             _taskDetailResult.value = TaskResult(success = "Sub task has been deleted")
+            _taskDetailResult.value = TaskResult(success = null)
         })
     }
 
@@ -33,6 +34,7 @@ class TaskDetailViewModel @Inject constructor (private val taskRepository: TaskR
 
         taskRepository.updateTaskStatus(task, changeToStatus, callback = {
             _taskDetailResult.value = TaskResult(success = "Sub task status has been changed to ${changeToStatus.string}")
+            _taskDetailResult.value = TaskResult(success = null)
         })
     }
 

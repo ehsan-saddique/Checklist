@@ -1,6 +1,7 @@
 package com.prismosis.checklist.ui.task
 
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
@@ -11,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.prismosis.checklist.R
 import com.prismosis.checklist.data.model.DTOTask
 import com.prismosis.checklist.data.model.Task
+import com.prismosis.checklist.utils.Enum
 import com.prismosis.checklist.utils.Utils
+import java.util.*
 
 /**
  * Created by Ehsan Saddique on 2020-03-14
@@ -78,6 +81,14 @@ class TaskItemViewHolder(itemView: View, isTaskDetail: Boolean = false) : Recycl
         taskStatus.setText(task.status.string)
         taskStatus.setBackgroundResource(task.status.drawableId)
         isSynced.visibility = if (task.isDirty) View.VISIBLE else View.GONE
+
+        if (Date() > task.endDate) {
+            taskStatus.setText(Enum.TaskStatus.EXPIRED.string)
+            taskStatus.setBackgroundResource(Enum.TaskStatus.EXPIRED.drawableId)
+
+            toolbar.menu.removeItem(R.id.action_change_status)
+            toolbar.menu.removeItem(R.id.action_edit)
+        }
 
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {

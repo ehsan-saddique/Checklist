@@ -103,6 +103,10 @@ data class DTOTask(var subTasksCount: Int?,
         }
     }
 
+    fun isTaskExpired(): Boolean {
+        return Date().after(endDate)
+    }
+
     fun getTaskEntity(): Task {
         return Task(taskId, parentId, userId, createdAt, taskName, taskDescription, startDate, endDate, status, isDirty, isDeleted)
     }

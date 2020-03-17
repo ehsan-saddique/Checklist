@@ -191,8 +191,7 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
         dialogBuilder.setTitle("Change Status to")
         val dataSource = listOf<String>(Enum.TaskStatus.PENDING.string,
             Enum.TaskStatus.INPROGRESS.string,
-            Enum.TaskStatus.COMPLETED.string,
-            Enum.TaskStatus.EXPIRED.string)
+            Enum.TaskStatus.COMPLETED.string)
 
         val currentStatus = task.status
         val checkedItem = dataSource.indexOf(currentStatus.string)

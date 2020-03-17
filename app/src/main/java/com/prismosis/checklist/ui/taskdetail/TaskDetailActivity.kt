@@ -55,6 +55,12 @@ class TaskDetailActivity : AppCompatActivity(), ClickListener {
 
         taskDetailViewModel.getAllSubTasks(taskId).observe(this, Observer { tasks ->
             mAdapter.setTaks(tasks)
+            if (!tasks.isEmpty()) {
+                val task = tasks.get(0)
+                if (task.isTaskExpired()) {
+                    fab.visibility = View.GONE
+                }
+            }
         })
 
         taskDetailViewModel.taskResult.observe(this, Observer {
@@ -114,8 +120,7 @@ class TaskDetailActivity : AppCompatActivity(), ClickListener {
         dialogBuilder.setTitle("Change Status to")
         val dataSource = listOf<String>(Enum.TaskStatus.PENDING.string,
             Enum.TaskStatus.INPROGRESS.string,
-            Enum.TaskStatus.COMPLETED.string,
-            Enum.TaskStatus.EXPIRED.string)
+            Enum.TaskStatus.COMPLETED.string)
 
         val currentStatus = task.status
         val checkedItem = dataSource.indexOf(currentStatus.string)
