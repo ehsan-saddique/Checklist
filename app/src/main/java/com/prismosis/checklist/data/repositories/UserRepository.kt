@@ -7,7 +7,7 @@ import com.prismosis.checklist.utils.Utils
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class UserRepository @Inject constructor(val firebaseAuth: FirebaseAuth) {
+open class UserRepository @Inject constructor(val firebaseAuth: FirebaseAuth) {
 
     fun signup(username: String, password: String, callback: (Result<String>)->Unit) {
 
@@ -70,7 +70,7 @@ class UserRepository @Inject constructor(val firebaseAuth: FirebaseAuth) {
     }
 
     fun logout() {
-        Utils.setIsTasksFetched(false)
+        Utils.instance.setIsTasksFetched(false)
         FirebaseAuth.getInstance().signOut()
     }
 }

@@ -14,7 +14,7 @@ import retrofit2.http.*
  * Created by Ehsan Saddique on 2020-03-15
  */
 
-class RestClient {
+open class RestClient {
     private var service: TaskService? = null
 
     fun getTaskService(): TaskService {

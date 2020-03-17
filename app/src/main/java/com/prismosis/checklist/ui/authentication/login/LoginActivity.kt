@@ -86,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             login.setOnClickListener {
-                Utils.hideSoftKeyboard(this@LoginActivity)
+                Utils.instance.hideSoftKeyboard(this@LoginActivity)
                 progressDialog.show()
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
@@ -111,7 +111,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun onLoginFailed(errorString: String) {
-        Utils.showSnackBar(window.decorView.rootView, errorString)
+        Utils.instance.showSnackBar(window.decorView.rootView, errorString)
     }
 }
 

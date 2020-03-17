@@ -16,6 +16,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.prismosis.checklist.R
 import java.lang.Exception
 import java.text.SimpleDateFormat
@@ -26,7 +28,12 @@ import java.util.*
  * Created by Ehsan Saddique on 2020-03-13
  */
 
-object Utils {
+open class Utils {
+
+    companion object {
+        val instance = Utils()
+    }
+
     fun hideSoftKeyboard(activity: Activity) {
         if (activity.currentFocus != null) {
             val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -113,6 +120,21 @@ object Utils {
 
     fun isTasksFetched(): Boolean {
         return PreferenceManager.getDefaultSharedPreferences(ChecklistApplication.context()).getBoolean("IsTasksFetched", false)
+    }
+
+    fun getFirebaseAuthToken(callback: (String)->Unit) {
+        var token = ""
+
+        FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener { result ->
+            if (result.isSuccessful) {
+                token = result.result?.token ?: ""
+            }
+            else {
+                token = ""
+            }
+
+            callback(token)
+        }
     }
 }
 

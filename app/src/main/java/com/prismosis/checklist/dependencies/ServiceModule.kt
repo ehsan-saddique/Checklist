@@ -6,6 +6,7 @@ import com.prismosis.checklist.data.repositories.UserRepository
 import com.prismosis.checklist.networking.RestClient
 import com.prismosis.checklist.ui.authentication.login.LoginViewModel
 import com.prismosis.checklist.ui.task.TaskViewModel
+import com.prismosis.checklist.utils.Utils
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -27,4 +28,8 @@ class ServiceModule {
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideUtils(): Utils = Utils.instance
 }

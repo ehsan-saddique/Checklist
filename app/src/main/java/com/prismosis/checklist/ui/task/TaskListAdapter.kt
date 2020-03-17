@@ -72,8 +72,8 @@ class TaskItemViewHolder(itemView: View, isTaskDetail: Boolean = false) : Recycl
     fun bind(task: DTOTask, listener: ClickListener) {
         taskName.setText(task.taskName)
         taskDescription.setText(if (task.taskDescription.isNullOrEmpty()) "No description" else task.taskDescription)
-        startDate.setText("Starts: " + Utils.stringFromDate(task.startDate))
-        endDate.setText("Ends: " + Utils.stringFromDate(task.endDate))
+        startDate.setText("Starts: " + Utils.instance.stringFromDate(task.startDate))
+        endDate.setText("Ends: " + Utils.instance.stringFromDate(task.endDate))
         subTasks.setText("+ Sub Tasks: " + task.subTasksCount)
         taskStatus.setText(task.status.string)
         taskStatus.setBackgroundResource(task.status.drawableId)

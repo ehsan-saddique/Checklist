@@ -10,6 +10,7 @@ import com.prismosis.checklist.data.model.TaskListServerResponse
 import com.prismosis.checklist.data.model.TaskServerResponseWrapper
 import com.prismosis.checklist.networking.RestClient
 import com.prismosis.checklist.utils.Enum
+import com.prismosis.checklist.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -22,14 +23,16 @@ import javax.inject.Inject
  * Created by Ehsan Saddique on 2020-03-13
  */
 
-class TaskRepository @Inject constructor(database: AppDatabase, restClient: RestClient) {
+open class TaskRepository @Inject constructor(database: AppDatabase, restClient: RestClient, firebaseAuth: FirebaseAuth) {
 
     private var taskDao: TaskDao
     private var mRestClient: RestClient
+    private var mFirebaseAuth: FirebaseAuth
 
     init {
         taskDao = database.taskDao()
         mRestClient = restClient
+        mFirebaseAuth = firebaseAuth
     }
 
     fun insertTask(task: DTOTask, callback: (Result<String>)->Unit) {
@@ -42,7 +45,7 @@ class TaskRepository @Inject constructor(database: AppDatabase, restClient: Rest
         }
     }
 
-    fun updateTask(task: DTOTask, callback: (Result<String>)->Unit) {
+    open fun updateTask(task: DTOTask, callback: (Result<String>)->Unit) {
         GlobalScope.launch {
             taskDao.update(task.getTaskEntity())
 
@@ -114,7 +117,7 @@ class TaskRepository @Inject constructor(database: AppDatabase, restClient: Rest
         }
     }
 
-    fun getAllTasks(): LiveData<List<DTOTask>> {
+    open fun getAllTasks(): LiveData<List<DTOTask>> {
         return taskDao.getAllTasks()
     }
 
@@ -128,7 +131,7 @@ class TaskRepository @Inject constructor(database: AppDatabase, restClient: Rest
 
     fun uploadTasksToCloud(callback: (Result<String>)->Unit) {
 
-        FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener { tokenResult ->
+        mFirebaseAuth.currentUser?.getIdToken(true)?.addOnCompleteListener { tokenResult ->
 
             if (tokenResult.isSuccessful) {
                 GlobalScope.launch {
@@ -177,7 +180,7 @@ class TaskRepository @Inject constructor(database: AppDatabase, restClient: Rest
     fun fetchTasksFromCloud(callback: (Result<String>)->Unit) {
         FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener { tokenResult ->
 
-            if (tokenResult.isSuccessful) {
+            if (!tokenResult.isSuccessful()) {
                 GlobalScope.launch {
                     var isSuccess = true
                     var errorMessage = ""

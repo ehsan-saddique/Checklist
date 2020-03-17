@@ -54,18 +54,14 @@ class AddEditActivity : AppCompatActivity() {
             task?.let {
                 name.setText(task.taskName)
                 description.setText(task.taskDescription)
-                startDate.setText(Utils.stringFromDate(task.startDate))
-                endDate.setText(Utils.stringFromDate(task.endDate))
+                startDate.setText(Utils.instance.stringFromDate(task.startDate))
+                endDate.setText(Utils.instance.stringFromDate(task.endDate))
             }
         }
 
         if (intent.hasExtra("parentId")) {
             parentId = intent.extras.getString("parentId") ?: ""
         }
-
-
-        taskUpdateViewModel = ViewModelProviders.of(this, TaskUpdateViewModelFactory())
-            .get(TaskUpdateViewModel::class.java)
 
 
         taskUpdateViewModel.taskUpdateResult.observe(this, Observer {
@@ -89,7 +85,7 @@ class AddEditActivity : AppCompatActivity() {
         }
 
         btnUpdate.setOnClickListener(View.OnClickListener {
-            Utils.hideSoftKeyboard(this)
+            Utils.instance.hideSoftKeyboard(this)
 
             val nameStr = name.text.toString()
             val descriptionStr = description.text.toString()
@@ -113,7 +109,7 @@ class AddEditActivity : AppCompatActivity() {
     }
 
     private fun showError(errorMessage: String) {
-        Utils.showSnackBar(window.decorView.rootView, errorMessage)
+        Utils.instance.showSnackBar(window.decorView.rootView, errorMessage)
     }
 
     private fun showDateTimePicker(editText: EditText) {
@@ -125,7 +121,7 @@ class AddEditActivity : AppCompatActivity() {
         datePicker.minDate = Date().time
 
         if (!editText.text.toString().isEmpty()) {
-            val alreadySelectedDate = Utils.dateFromString(editText.text.toString())
+            val alreadySelectedDate = Utils.instance.dateFromString(editText.text.toString())
             val calendar = Calendar.getInstance()
             calendar.time = alreadySelectedDate
 
@@ -136,7 +132,7 @@ class AddEditActivity : AppCompatActivity() {
 
         if (editText === endDate) {
             if (!startDate.text.toString().isEmpty()) {
-                datePicker.minDate = Utils.dateFromString(startDate.text.toString()).time
+                datePicker.minDate = Utils.instance.dateFromString(startDate.text.toString()).time
             }
         }
 
@@ -151,7 +147,7 @@ class AddEditActivity : AppCompatActivity() {
             )
 
             val dateTime = Date(calendar.getTimeInMillis())
-            editText.setText(Utils.stringFromDate(dateTime))
+            editText.setText(Utils.instance.stringFromDate(dateTime))
             alertDialog.dismiss()
         })
         alertDialog.setView(dialogView)

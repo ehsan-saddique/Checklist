@@ -20,11 +20,11 @@ import kotlin.collections.HashMap
 @Entity (tableName = "tasks")
 data class Task(
     @PrimaryKey(autoGenerate = false)
-    val taskId: String,
-    val parentId: String,
-    val userId: String,
-    val createdAt: Date,
-    val taskName: String,
+    var taskId: String,
+    var parentId: String,
+    var userId: String,
+    var createdAt: Date,
+    var taskName: String,
     var taskDescription: String?,
     var startDate: Date,
     var endDate: Date,

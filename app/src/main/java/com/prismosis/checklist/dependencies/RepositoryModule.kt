@@ -5,6 +5,7 @@ import com.prismosis.checklist.data.database.AppDatabase
 import com.prismosis.checklist.data.repositories.TaskRepository
 import com.prismosis.checklist.data.repositories.UserRepository
 import com.prismosis.checklist.networking.RestClient
+import com.prismosis.checklist.utils.Utils
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -21,5 +22,5 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideTaskRepository(database: AppDatabase, restClient: RestClient): TaskRepository = TaskRepository(database, restClient)
+    fun provideTaskRepository(database: AppDatabase, restClient: RestClient, firebaseAuth: FirebaseAuth): TaskRepository = TaskRepository(database, restClient, firebaseAuth)
 }

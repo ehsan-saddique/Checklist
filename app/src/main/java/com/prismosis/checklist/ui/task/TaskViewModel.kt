@@ -63,7 +63,7 @@ class TaskViewModel @Inject constructor (private val taskRepository: TaskReposit
     fun fetchDataFromCloud() {
         taskRepository.fetchTasksFromCloud { result ->
             if (result is Result.Success) {
-                Utils.setIsTasksFetched(true)
+                Utils.instance.setIsTasksFetched(true)
                 _taskResult.value = TaskResult(success = result.data)
             }
             else {

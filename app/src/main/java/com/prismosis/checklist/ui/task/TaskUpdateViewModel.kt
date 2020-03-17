@@ -29,8 +29,8 @@ class TaskUpdateViewModel @Inject constructor (private val taskRepository: TaskR
             name,
             description,
             Date(),
-            Utils.dateFromString(startDate),
-            Utils.dateFromString(endDate),
+            Utils.instance.dateFromString(startDate),
+            Utils.instance.dateFromString(endDate),
             Enum.TaskStatus.PENDING)
 
         taskRepository.insertTask(task, callback = { result ->
@@ -45,8 +45,8 @@ class TaskUpdateViewModel @Inject constructor (private val taskRepository: TaskR
             name,
             description,
             task.createdAt,
-            Utils.dateFromString(startDate),
-            Utils.dateFromString(endDate),
+            Utils.instance.dateFromString(startDate),
+            Utils.instance.dateFromString(endDate),
             status)
 
         taskRepository.updateTask(taskToUpdate, callback = { result ->

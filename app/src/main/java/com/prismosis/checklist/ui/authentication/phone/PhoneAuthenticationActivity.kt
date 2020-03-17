@@ -90,13 +90,13 @@ class PhoneAuthenticationActivity : AppCompatActivity(), PhoneCallbacks.PhoneCal
         }
 
         btnAuthenticate.setOnClickListener {
-            Utils.hideSoftKeyboard(this)
+            Utils.instance.hideSoftKeyboard(this)
             progressDialog.show()
             sendVerificationCode(phoneNumber.text.toString())
         }
 
         btnVerifyCode.setOnClickListener{
-            Utils.hideSoftKeyboard(this)
+            Utils.instance.hideSoftKeyboard(this)
             if (verificationCode.text.isNullOrEmpty()) {
                 verificationCode.error = "Please enter the verification code"
             }
@@ -127,7 +127,7 @@ class PhoneAuthenticationActivity : AppCompatActivity(), PhoneCallbacks.PhoneCal
     }
 
     private fun showAuthFailure(errorString: String) {
-        Utils.showSnackBar(window.decorView.rootView, errorString)
+        Utils.instance.showSnackBar(window.decorView.rootView, errorString)
     }
 
     private fun sendVerificationCode(phoneNumber: String) {

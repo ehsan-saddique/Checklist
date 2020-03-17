@@ -78,11 +78,11 @@ class TaskDetailActivity : AppCompatActivity(), ClickListener {
     }
 
     private fun showError(errorMsg: String) {
-        Utils.showSnackBar(window.decorView.rootView, errorMsg)
+        Utils.instance.showSnackBar(window.decorView.rootView, errorMsg)
     }
 
     private fun showSuccess(successMsg: String) {
-        Utils.showSnackBar(window.decorView.rootView, successMsg, isSticky = false)
+        Utils.instance.showSnackBar(window.decorView.rootView, successMsg, isSticky = false)
     }
 
     override fun onItemClick(task: DTOTask) {
@@ -98,7 +98,7 @@ class TaskDetailActivity : AppCompatActivity(), ClickListener {
     }
 
     override fun onDeleteClick(task: DTOTask) {
-        Utils.showDialog(this, null, "Are you sure you want to delete this task? All of the sub tasks will also be deleted.",
+        Utils.instance.showDialog(this, null, "Are you sure you want to delete this task? All of the sub tasks will also be deleted.",
             "Delete", true, DialogInterface.OnClickListener { _, _ ->
                 taskDetailViewModel.deleteTask(task)
             })

@@ -96,7 +96,7 @@ class SignupActivity : AppCompatActivity() {
         }
 
         signup.setOnClickListener {
-            Utils.hideSoftKeyboard(this)
+            Utils.instance.hideSoftKeyboard(this)
             progressDialog.show()
             signupViewModel.signup(username.text.toString(), password.text.toString())
         }
@@ -108,7 +108,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun showSignupFailed(errorString: String) {
-        Utils.showSnackBar(window.decorView.rootView, errorString)
+        Utils.instance.showSnackBar(window.decorView.rootView, errorString)
     }
 }
 

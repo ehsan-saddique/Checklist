@@ -53,9 +53,6 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
         progressDialog.isIndeterminate = true
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
 
-//        taskViewModel = ViewModelProviders.of(this, TaskViewModelFactory())
-//            .get(TaskViewModel::class.java)
-
         mAdapter = TaskListAdapter(ArrayList<DTOTask>(), this)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@TaskListActivity)
@@ -98,7 +95,7 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
             }
         })
 
-        if (!Utils.isTasksFetched()) {
+        if (!Utils.instance.isTasksFetched()) {
             progressDialog.setTitle("Fetching data")
             progressDialog.show()
             taskViewModel.fetchDataFromCloud()
@@ -117,11 +114,11 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
     }
 
     private fun showError(errorMsg: String) {
-        Utils.showSnackBar(window.decorView.rootView, errorMsg)
+        Utils.instance.showSnackBar(window.decorView.rootView, errorMsg)
     }
 
     private fun showSuccess(successMsg: String) {
-        Utils.showSnackBar(window.decorView.rootView, successMsg, isSticky = false)
+        Utils.instance.showSnackBar(window.decorView.rootView, successMsg, isSticky = false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -132,7 +129,7 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_logout -> {
-            Utils.showDialog(this,null, "Are you sure you want to logout? Tasks which have not been synced with server will be deleted.", "Logout", true, DialogInterface.OnClickListener { _, _ ->
+            Utils.instance.showDialog(this,null, "Are you sure you want to logout? Tasks which have not been synced with server will be deleted.", "Logout", true, DialogInterface.OnClickListener { _, _ ->
                 taskViewModel.logoutUser()
                 finish()
                 val intent = Intent(this@TaskListActivity, LauncherActivity::class.java)
@@ -150,7 +147,7 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
         }
         R.id.action_force_push -> {
 
-            Utils.showDialog(this,null, "This will upload all your changed tasks, but it will download all the data after that. So it might take some time to sync.", "Sync Everything", true, DialogInterface.OnClickListener { _, _ ->
+            Utils.instance.showDialog(this,null, "This will upload all your changed tasks, but it will download all the data after that. So it might take some time to sync.", "Sync Everything", true, DialogInterface.OnClickListener { _, _ ->
                 progressDialog.show()
                 taskViewModel.forceSyncData()
             })
@@ -178,7 +175,7 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
     }
 
     override fun onDeleteClick(task: DTOTask) {
-        Utils.showDialog(this, null, "Are you sure you want to delete this task? All of the sub tasks will also be deleted.",
+        Utils.instance.showDialog(this, null, "Are you sure you want to delete this task? All of the sub tasks will also be deleted.",
             "Delete", true, DialogInterface.OnClickListener { _, _ ->
                 taskViewModel.deleteTask(task)
             })
