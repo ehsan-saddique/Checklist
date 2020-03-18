@@ -139,12 +139,13 @@ open class TaskRepository @Inject constructor(database: AppDatabase, restClient:
                     var errorMessage = ""
                     var authToken = tokenResult.result?.token ?: ""
                     authToken = "Bearer " + authToken
+                    var userId = mFirebaseAuth.currentUser?.uid ?: ""
 
                     val dirtyTasks = taskDao.getDirtyTasks()
                     for (task in dirtyTasks) {
                         val serverRequest = TaskServerResponseWrapper()
                         serverRequest.fields = task.toServerResponse()
-                        val apiCall = mRestClient.getTaskService().insertOrUpdateTask(authToken, task.taskId, serverRequest)
+                        val apiCall = mRestClient.getTaskService().insertOrUpdateTask(authToken, userId, task.taskId, serverRequest)
 
                         val response = apiCall.execute()
                         if (response.isSuccessful) {

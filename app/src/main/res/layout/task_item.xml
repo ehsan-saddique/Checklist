@@ -93,9 +93,9 @@
                 android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_alignParentEnd="true"
-                   android:layout_below="@id/task_end_date"
+                android:layout_alignBottom="@id/sub_tasks"
                    android:layout_marginRight="-8dp"
-                   android:src="@drawable/ic_sync_30dp"/>
+                   android:src="@drawable/ic_error_outline"/>
 
         <Toolbar
                 android:id="@+id/toolbar_task_item"

@@ -46,6 +46,7 @@ class TaskListAdapter(private var tasks: List<DTOTask>, private var listener: Cl
 }
 
 class TaskItemViewHolder(itemView: View, isTaskDetail: Boolean = false) : RecyclerView.ViewHolder(itemView) {
+    private var isTaskDetail: Boolean
     private var taskName: TextView
     private var taskDescription: TextView
     private var startDate: TextView
@@ -56,6 +57,7 @@ class TaskItemViewHolder(itemView: View, isTaskDetail: Boolean = false) : Recycl
     private var toolbar: Toolbar
 
     init {
+        this.isTaskDetail = isTaskDetail
         taskName = itemView.findViewById(R.id.task_name)
         taskDescription = itemView.findViewById(R.id.task_description)
         startDate = itemView.findViewById(R.id.task_start_date)
@@ -112,6 +114,10 @@ class TaskItemViewHolder(itemView: View, isTaskDetail: Boolean = false) : Recycl
 
         itemView.setOnClickListener {
             listener.onItemClick(task)
+        }
+
+        if (isTaskDetail) {
+            itemView.setOnClickListener(null)
         }
     }
 }

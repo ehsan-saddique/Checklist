@@ -10,17 +10,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.prismosis.checklist.R
-import com.prismosis.checklist.data.model.Task
 import com.prismosis.checklist.ui.launcher.LauncherActivity
 import com.prismosis.checklist.utils.Utils
 
 import kotlinx.android.synthetic.main.activity_task_list.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.prismosis.checklist.data.model.DTOTask
 import com.prismosis.checklist.ui.taskdetail.TaskDetailActivity

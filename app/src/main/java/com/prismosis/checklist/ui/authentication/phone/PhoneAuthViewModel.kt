@@ -47,6 +47,8 @@ class PhoneAuthViewModel @Inject constructor (private val userRepository: UserRe
             } else {
                 _authResult.value = AuthResult(error = (result as Result.Error).exception.localizedMessage)
             }
+            _authResult.value = AuthResult(success = null)
+            _authResult.value = AuthResult(error = null)
         })
     }
 

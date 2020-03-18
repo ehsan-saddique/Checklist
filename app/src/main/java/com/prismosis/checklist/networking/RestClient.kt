@@ -19,9 +19,8 @@ open class RestClient {
 
     fun getTaskService(): TaskService {
         if (service == null) {
-            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
             service = Retrofit.Builder()
-                .baseUrl("https://firestore.googleapis.com/v1/projects/checklist-c04e2/databases/(default)/documents/checklist/$userId/")
+                .baseUrl("https://firestore.googleapis.com/v1/projects/checklist-c04e2/databases/(default)/documents/checklist/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(TaskService::class.java)
@@ -35,8 +34,10 @@ interface TaskService {
     @GET("tasks")
     fun getAllTasks(@Header("Authorization") authToken: String): Call<TaskListServerResponse>
 
-    @PATCH("tasks/{taskId}")
+    @PATCH("tasks/{userId}/{taskId}")
     fun insertOrUpdateTask(@Header("Authorization") authToken:
-                           String, @Path("taskId")
-                            taskId: String, @Body parameters: TaskServerResponseWrapper): Call<TaskServerResponse>
+                           String, @Path("userId")
+                            userId: String,
+                           @Path("taskId")
+                           taskId: String, @Body parameters: TaskServerResponseWrapper): Call<TaskServerResponse>
 }
