@@ -33,6 +33,12 @@ open class TaskRepository @Inject constructor(database: AppDatabase, restClient:
         taskDao = database.taskDao()
         mRestClient = restClient
         mFirebaseAuth = firebaseAuth
+
+        getAllTasks().observeForever { tasks ->
+            uploadTasksToCloud {
+                println("Data synced in background")
+            }
+        }
     }
 
     fun insertTask(task: DTOTask, callback: (Result<String>)->Unit) {
@@ -139,7 +145,7 @@ open class TaskRepository @Inject constructor(database: AppDatabase, restClient:
                     var errorMessage = ""
                     var authToken = tokenResult.result?.token ?: ""
                     authToken = "Bearer " + authToken
-                    var userId = mFirebaseAuth.currentUser?.uid ?: ""
+                    val userId = mFirebaseAuth.currentUser?.uid ?: ""
 
                     val dirtyTasks = taskDao.getDirtyTasks()
                     for (task in dirtyTasks) {

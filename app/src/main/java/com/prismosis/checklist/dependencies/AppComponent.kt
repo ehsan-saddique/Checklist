@@ -1,5 +1,6 @@
 package com.prismosis.checklist.dependencies
 
+import com.prismosis.checklist.data.repositories.TaskRepository
 import com.prismosis.checklist.ui.authentication.login.LoginActivity
 import com.prismosis.checklist.ui.authentication.phone.PhoneAuthenticationActivity
 import com.prismosis.checklist.ui.authentication.signup.SignupActivity
@@ -22,5 +23,7 @@ interface AppComponent {
     fun inject(activity: TaskListActivity)
     fun inject(activity: TaskDetailActivity)
     fun inject(activity: AddEditActivity)
+
+    fun getTaskRepository(): TaskRepository
 
 }
