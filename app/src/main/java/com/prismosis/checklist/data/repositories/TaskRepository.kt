@@ -180,7 +180,7 @@ open class TaskRepository @Inject constructor(database: AppDatabase, restClient:
     fun fetchTasksFromCloud(callback: (Result<String>)->Unit) {
         FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.addOnCompleteListener { tokenResult ->
 
-            if (!tokenResult.isSuccessful()) {
+            if (tokenResult.isSuccessful()) {
                 GlobalScope.launch {
                     var isSuccess = true
                     var errorMessage = ""

@@ -96,7 +96,7 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
         })
 
         if (!Utils.instance.isTasksFetched()) {
-            progressDialog.setTitle("Fetching data")
+            progressDialog.setTitle("Syncing data")
             progressDialog.show()
             taskViewModel.fetchDataFromCloud()
         }

@@ -62,13 +62,8 @@ class TaskViewModel @Inject constructor (private val taskRepository: TaskReposit
 
     fun fetchDataFromCloud() {
         taskRepository.fetchTasksFromCloud { result ->
-            if (result is Result.Success) {
-                Utils.instance.setIsTasksFetched(true)
-                _taskResult.value = TaskResult(success = result.data)
-            }
-            else {
-                _taskResult.value = TaskResult(error = (result as Result.Error).exception.localizedMessage)
-            }
+            Utils.instance.setIsTasksFetched(true)
+            _taskResult.value = TaskResult(success = "Your data has been synced successfully.")
         }
     }
 

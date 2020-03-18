@@ -31,6 +31,7 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
             else {
                 _loginResult.value = AuthResult(error = (result as Result.Error).exception.localizedMessage)
             }
+            _loginResult.value = AuthResult(success = null)
         })
     }
 
