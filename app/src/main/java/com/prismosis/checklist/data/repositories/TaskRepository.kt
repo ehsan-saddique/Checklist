@@ -2,6 +2,7 @@ package com.prismosis.checklist.data.repositories
 
 import androidx.lifecycle.LiveData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
 import com.prismosis.checklist.data.Result
 import com.prismosis.checklist.data.database.AppDatabase
 import com.prismosis.checklist.data.model.DTOTask
@@ -9,6 +10,7 @@ import com.prismosis.checklist.data.model.TaskDao
 import com.prismosis.checklist.data.model.TaskListServerResponse
 import com.prismosis.checklist.data.model.TaskServerResponseWrapper
 import com.prismosis.checklist.networking.RestClient
+import com.prismosis.checklist.utils.Constants
 import com.prismosis.checklist.utils.Enum
 import com.prismosis.checklist.utils.Utils
 import kotlinx.coroutines.Dispatchers
@@ -33,12 +35,6 @@ open class TaskRepository @Inject constructor(database: AppDatabase, restClient:
         taskDao = database.taskDao()
         mRestClient = restClient
         mFirebaseAuth = firebaseAuth
-
-        getAllTasks().observeForever { tasks ->
-            uploadTasksToCloud {
-                println("Data synced in background")
-            }
-        }
     }
 
     fun insertTask(task: DTOTask, callback: (Result<String>)->Unit) {
@@ -151,16 +147,17 @@ open class TaskRepository @Inject constructor(database: AppDatabase, restClient:
                     for (task in dirtyTasks) {
                         val serverRequest = TaskServerResponseWrapper()
                         serverRequest.fields = task.toServerResponse()
-                        val apiCall = mRestClient.getTaskService().insertOrUpdateTask(authToken, userId, task.taskId, serverRequest)
 
-                        val response = apiCall.execute()
-                        if (response.isSuccessful) {
+                        val endpointUrl = Constants.baseUrl + "/tasks/$userId/${task.taskId}"
+                        val networkResposne = mRestClient.patch(endpointUrl, serverRequest, authToken)
+
+                        if (networkResposne.isSuccessfull) {
                             task.isDirty = false
                             taskDao.update(task.getTaskEntity())
                         }
                         else {
                             allRequestsSuccessful = false
-                            errorMessage = response.errorBody()?.string() ?: ""
+                            errorMessage = networkResposne.error
                             break
                         }
                     }
@@ -191,21 +188,23 @@ open class TaskRepository @Inject constructor(database: AppDatabase, restClient:
                 GlobalScope.launch {
                     var isSuccess = true
                     var errorMessage = ""
+                    var userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
                     var authToken = tokenResult.result?.token ?: ""
                     authToken = "Bearer " + authToken
 
-                    val apiCall = mRestClient.getTaskService().getAllTasks(authToken)
+                    val url = Constants.baseUrl + "/tasks/$userId"
+                    val networkResponse = mRestClient.get(url, authToken)
 
-                    val response = apiCall.execute()
-                    if (response.isSuccessful) {
-                        for (document in response.body()?.documents ?: ArrayList()) {
+                    if (networkResponse.isSuccessfull) {
+                        val taskListServerResponse = Gson().fromJson(networkResponse.data, TaskListServerResponse::class.java)
+                        for (document in taskListServerResponse.documents) {
                             val dtoTask = DTOTask.getTaskFromServerResponse(document.fields)
                             taskDao.insertOrUpdate(dtoTask.getTaskEntity())
                         }
                     }
                     else {
                         isSuccess = false
-                        errorMessage = response.errorBody()?.string() ?: ""
+                        errorMessage = networkResponse.error
                     }
 
                     GlobalScope.launch(Dispatchers.Main) {

@@ -16,6 +16,14 @@ class TaskViewModel @Inject constructor (private val taskRepository: TaskReposit
     private val _taskResult = MutableLiveData<TaskResult>()
     val taskResult: LiveData<TaskResult> = _taskResult
 
+    init {
+        taskRepository.getAllTasks().observeForever { tasks ->
+            taskRepository.uploadTasksToCloud {
+                println("Data synced in background")
+            }
+        }
+    }
+
     fun getAllTasks(): LiveData<List<DTOTask>> {
         return taskRepository.getAllTasks()
     }
