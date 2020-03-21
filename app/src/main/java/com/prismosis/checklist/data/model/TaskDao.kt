@@ -44,4 +44,7 @@ interface TaskDao {
 
     @Query("SELECT COUNT(taskId) FROM tasks WHERE isDirty = 1")
     fun getDirtyTasksCount(): LiveData<Int>
+
+    @Query("SELECT COUNT(taskId) FROM tasks WHERE isDirty = 1")
+    fun getDirtyTasksCounts(): Int
 }

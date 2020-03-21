@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
@@ -120,6 +121,11 @@ class TaskListActivity : AppCompatActivity(), ClickListener {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_task_list, menu)
         syncMenuItem = menu?.findItem(R.id.action_sync_data)
+        taskViewModel.getDirtyTasksCount { count ->
+            if (count > 0) {
+                syncMenuItem?.setIcon(R.drawable.ic_sync_warning)
+            }
+        }
         return super.onCreateOptionsMenu(menu)
     }
 

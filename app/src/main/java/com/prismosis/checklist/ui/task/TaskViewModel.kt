@@ -9,6 +9,9 @@ import com.prismosis.checklist.utils.Enum
 import com.prismosis.checklist.data.Result
 import com.prismosis.checklist.data.repositories.UserRepository
 import com.prismosis.checklist.utils.Utils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TaskViewModel @Inject constructor (private val taskRepository: TaskRepository, private val userRepository: UserRepository) : ViewModel() {
@@ -30,6 +33,12 @@ class TaskViewModel @Inject constructor (private val taskRepository: TaskReposit
 
     fun getDirtyTasksCount(): LiveData<Int> {
         return taskRepository.getDirtyTasksCount()
+    }
+
+    fun getDirtyTasksCount(callback: (Int)->Unit) {
+        taskRepository.getDirtyTasksCount { count ->
+            callback(count)
+        }
     }
 
     fun deleteTask(task: DTOTask) {

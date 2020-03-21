@@ -127,6 +127,15 @@ open class TaskRepository @Inject constructor(database: AppDatabase, restClient:
         return taskDao.getDirtyTasksCount()
     }
 
+    fun getDirtyTasksCount(callback: (Int)->Unit) {
+        GlobalScope.launch {
+            val count = taskDao.getDirtyTasksCounts()
+            GlobalScope.launch (Dispatchers.Main) {
+                callback(count)
+            }
+        }
+    }
+
     fun getAllSubTasks(taskId: String): LiveData<List<DTOTask>> {
         return taskDao.getAllSubTasks(taskId)
     }
