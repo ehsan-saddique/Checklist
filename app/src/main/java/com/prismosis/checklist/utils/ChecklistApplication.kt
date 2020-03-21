@@ -38,7 +38,7 @@ class ChecklistApplication: Application() {
             val mJobInfo: JobInfo
 
             mJobInfo = JobInfo.Builder(JOB_ID, componentName)
-                .setMinimumLatency(300)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .build()
 
 

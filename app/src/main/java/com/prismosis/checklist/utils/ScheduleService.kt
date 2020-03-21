@@ -16,6 +16,7 @@ class ScheduleService : JobService() {
     var mTaskRepository = ChecklistApplication.instance?.appComponent?.getTaskRepository()
 
     override fun onStartJob(params: JobParameters?): Boolean {
+        println("onStartJob has been called")
 
         if (mTaskRepository == null || FirebaseAuth.getInstance().currentUser == null) {
             jobFinished(params, true)
