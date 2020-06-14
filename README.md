@@ -9,4 +9,7 @@
 * Retrofit
 * Okhttp
 * Material Design
+
+## Preview
+
 ![alt-text](app/src/main/java/com/prismosis/checklist/utils/ChecklistGIF.gif)
