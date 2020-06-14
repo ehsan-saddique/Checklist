@@ -2,6 +2,7 @@
 ## Technologies Used
 * Kotlin
 * Android Architecture Components
+* Firebase
 * LiveData
 * ViewModels
 * Room
