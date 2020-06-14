@@ -7,6 +7,7 @@
 * ViewModels
 * Room
 * Dependency Injection
+* Dagger
 * Retrofit
 * Okhttp
 * Material Design
